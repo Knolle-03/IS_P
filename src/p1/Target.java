@@ -1,3 +1,5 @@
+package p1;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -7,8 +9,8 @@ public class Target {
   private final PVector targetPos;
 
 
-  public Target (PApplet sketch, PVector targetPos) {
-    this.targetPos = targetPos;
+  public Target (PApplet sketch) {
+    this.targetPos = new PVector(sketch.width / 2f, 50);
     this.sketch = sketch;
   }
 

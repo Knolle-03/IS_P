@@ -1,3 +1,7 @@
+package p1;
+
+import p1.Rocket;
+import p1.Target;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
@@ -32,14 +36,14 @@ public class Population {
     for (Rocket r : population) {
        r.calcFitness(target.getPos());
       if (r.fitness > fittest.fitness) fittest = r;
-      System.out.println(r.fitness);
+      System.out.println("Fitness of rocket: " + r.fitness);
     }
     for (Rocket r : population) {
       r.fitness /= fittest.fitness;
     }
   }
 
-//  private float distToTarget(Rocket rocket) {
+//  private float distToTarget(p1.Rocket rocket) {
 //    return 10 / target.getPos().dist(rocket.getPos());
 //  }
 
@@ -47,7 +51,7 @@ public class Population {
     List<Rocket> matingPool = new ArrayList<>();
     for (Rocket rocket : population) {
       int n = (int) Math.floor(rocket.fitness * 100);
-      System.out.println("This Rocket is put in the mating pool " + n + " times. Its fitness is: " + rocket.fitness);
+      System.out.println("This p1.Rocket is put in the mating pool " + n + " times. Its fitness is: " + rocket.fitness);
       for (int i = 0; i < n; i++) {
         matingPool.add(rocket);
       }
@@ -57,8 +61,12 @@ public class Population {
 
     for (int i = 0; i < population.size(); i++) {
       Rocket parentA = matingPool.get(ThreadLocalRandom.current().nextInt(matingPool.size()));
-      Rocket parentB = matingPool.get(ThreadLocalRandom.current().nextInt(matingPool.size()));
-      population.set(i, parentA.mate(parentB));
+      Rocket parentB;
+      //do {
+        parentB = matingPool.get(ThreadLocalRandom.current().nextInt(matingPool.size()));
+     // } while (parentA.equals(parentB));
+      Rocket offSpring = parentA.mate(parentB);
+      population.set(i, offSpring);
     }
   }
 

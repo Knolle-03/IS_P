@@ -1,3 +1,5 @@
+package p1;
+
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class DNA {
 
   public DNA(int length, float mutationRate) {
     for (int i = 0; i < length; i++) {
-      genes.add(PVector.random2D().setMag(0.5f));
+      genes.add(PVector.random2D().setMag(0.1f));
     }
     this.mutationRate = mutationRate;
   }
@@ -29,7 +31,7 @@ public class DNA {
       else newGenes.add(dna.genes.get(i));
     }
     DNA childDNA = new DNA(newGenes, mutationRate);
-    childDNA.mutate();
+    //childDNA.mutate();
     return childDNA;
   }
 

@@ -1,21 +1,32 @@
+package p1;
+
 import processing.core.*;
 
 
 
 public class Rocket {
 
-  private final PApplet sketch;
-  private  DNA dna;
-  private final PVector position;
-  private final PVector velocity;
-  private final PVector acceleration;
+  PApplet sketch;
+  DNA dna;
+  PVector position;
+  PVector velocity;
+  PVector acceleration;
   private int age = 0;
   double fitness = 0;
+  boolean targetHit = false;
 
   public Rocket(PApplet sketch,int lifespan, float mutationRate) {
     this(sketch);
     this.dna = new DNA(lifespan, mutationRate);
 
+  }
+
+  public Rocket(PApplet sketch, DNA dna, PVector position, PVector velocity, PVector acceleration) {
+    this.sketch = sketch;
+    this.dna = dna;
+    this.position = position;
+    this.velocity = velocity;
+    this.acceleration = acceleration;
   }
 
   public Rocket(PApplet sketch) {
@@ -30,16 +41,23 @@ public class Rocket {
     this.dna = dna;
   }
 
-  public void applyForce() {
-    velocity.add(dna.genes.get(age));
+  private void applyForce(PVector vector) {
+    acceleration.add(vector);
     age++;
   }
 
-  public void update() {
-    velocity.add(acceleration);
-    position.add(velocity);
-    acceleration.mult(0);
-
+  public void update(PVector targetPos) {
+    float distance = PVector.dist(this.position, targetPos);
+    if (distance < 400) {
+      targetHit = true;
+      position = targetPos;
+    }
+    applyForce(dna.genes.get(age));
+    if (!targetHit) {
+      velocity.add(acceleration);
+      position.add(velocity);
+      acceleration.mult(0);
+    }
   }
 
   public void show() {
@@ -56,10 +74,7 @@ public class Rocket {
 
 
   public void calcFitness(PVector targetPos) {
-    float xDist = this.position.x - targetPos.x;
-    float yDist = this.position.y - targetPos.y;
-
-    fitness =  10 / Math.sqrt(xDist * xDist + yDist * yDist);
+    fitness =  1/this.position.dist(targetPos);
   }
 
 
