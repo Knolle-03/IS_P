@@ -1,4 +1,4 @@
-package p1;
+package p1.rockets;
 
 import processing.core.PVector;
 
@@ -13,7 +13,7 @@ public class DNA {
 
   public DNA(int length, float mutationRate) {
     for (int i = 0; i < length; i++) {
-      genes.add(PVector.random2D().setMag(0.1f));
+      genes.add(PVector.random2D().setMag(0.3f));
     }
     this.mutationRate = mutationRate;
   }
@@ -31,15 +31,18 @@ public class DNA {
       else newGenes.add(dna.genes.get(i));
     }
     DNA childDNA = new DNA(newGenes, mutationRate);
-    //childDNA.mutate();
+    childDNA.mutate();
     return childDNA;
   }
 
 
   public void mutate() {
-    for (PVector vec : genes) {
-      float roll = ThreadLocalRandom.current().nextFloat();
-      if (roll < mutationRate) vec = PVector.random2D();
+    float roll;
+    for (int i = 0; i < genes.size(); i++) {
+      roll = ThreadLocalRandom.current().nextFloat();
+      if (roll < mutationRate) {
+        genes.set(i, PVector.random2D());
+      }
     }
   }
 

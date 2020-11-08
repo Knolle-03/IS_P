@@ -1,4 +1,4 @@
-package p1;
+package p1.rockets;
 
 import processing.core.PApplet;
 import processing.core.PVector;
