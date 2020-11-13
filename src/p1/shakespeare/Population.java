@@ -7,8 +7,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Population {
 
   List<Phrase> population;
-
-
   List<Phrase> matingPool;
 
   private char[] target;

@@ -5,9 +5,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String target = "Heute gab es Huhn zu Mittag.";
+        String target = "Heute ist Dienstag der 10. November 2020.";
         int genNumber = 0;
-        Population population = new Population(target, 0.01f, 200);
+        Population population = new Population(target, 0.01f, 500);
 
         while (!population.gotTarget){
 

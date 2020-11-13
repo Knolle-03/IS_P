@@ -41,7 +41,7 @@ public class DNA {
     for (int i = 0; i < genes.size(); i++) {
       roll = ThreadLocalRandom.current().nextFloat();
       if (roll < mutationRate) {
-        genes.set(i, PVector.random2D());
+        genes.set(i, PVector.random2D()).setMag(0.3f);
       }
     }
   }

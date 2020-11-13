@@ -1,7 +1,6 @@
 package p1.rockets;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -88,7 +87,7 @@ public enum SelectionMethod {
   },
 
   ELITIST_SELECTION {
-    // TODO:: add parameter for second selection method
+    // TODO:: rewrite so that the elite bypasses the recombination and mutation phase!
     @Override
     public List<Rocket> selection(Population population,int matingPoolSize, int k_Best, SelectionMethod selectionMethod ) {
       List<Rocket> survivors = new ArrayList<>();

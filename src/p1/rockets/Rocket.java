@@ -10,34 +10,27 @@ public class Rocket {
   PApplet sketch;
   DNA dna;
   PVector position;
+  PVector startPos;
   PVector velocity;
   PVector acceleration;
   private int age = 0;
   double fitness = 0;
   boolean targetHit = false;
   boolean crashed;
-  int impactAge;
+  int impactAge = Integer.MAX_VALUE;
   float lastDist;
   boolean alreadySet = false;
 
 
-  public Rocket(PApplet sketch,int lifespan, float mutationRate) {
+  public Rocket(PApplet sketch,int lifespan, float mutationRate, PVector startPos) {
     this(sketch);
+    this.startPos = startPos;
     this.dna = new DNA(lifespan, mutationRate);
-
-  }
-
-  public Rocket(PApplet sketch, DNA dna, PVector position, PVector velocity, PVector acceleration) {
-    this.sketch = sketch;
-    this.dna = dna;
-    this.position = position;
-    this.velocity = velocity;
-    this.acceleration = acceleration;
   }
 
   public Rocket(PApplet sketch) {
     this.sketch = sketch;
-    position = new PVector(sketch.width / 2f, sketch.height - 150);
+    this.position = new PVector( sketch.width /2f, sketch.height - sketch.height / 5f);
     velocity = new PVector();
     acceleration = new PVector();
   }
@@ -53,31 +46,29 @@ public class Rocket {
   }
 
   public void update(PVector targetPos, List<Obstacle> obstacles) {
-    if(targetHit(targetPos)){
+    if(rocketHit(targetPos)){
       targetHit = true;
       if(!alreadySet) {
         impactAge = age;
         alreadySet = true;
       }
     }
-    if(obstacleHit(obstacles)) crashed = true;
-
-
-
+    if(rocketHit(obstacles)) crashed = true;
     applyForce(dna.genes.get(age));
     if (!targetHit && !crashed) {
       velocity.add(acceleration);
       position.add(velocity);
-      acceleration.mult(0);
+      //acceleration.mult(0);
+      velocity.limit(10);
     }
   }
 
-  public boolean targetHit(PVector targetPos) {
-    lastDist = PVector.dist(this.position, targetPos);
+  public boolean rocketHit(PVector targetPos) {
+    lastDist = position.dist(targetPos);
     return  lastDist < 25;
   }
 
-  public boolean obstacleHit(List<Obstacle> obstacles) {
+  public boolean rocketHit(List<Obstacle> obstacles) {
     for (Obstacle obs : obstacles) {
       if ((position.x > obs.x && position.x < obs.x + obs.width) &&
           (position.y > obs.y && position.y < obs.y + obs.height)) {
@@ -88,13 +79,15 @@ public class Rocket {
   }
 
   public void calcFitness(PVector targetPos) {
-    fitness =  1/this.position.dist(targetPos);
+    fitness =  1 / position.dist(targetPos);
     if (targetHit){
-      fitness *= (100d * dna.genes.size()) / impactAge;
-    } else if (!crashed) {
-      fitness *= 2;
-    } else fitness /= 10d;
+      fitness *= 10d * dna.genes.size() / impactAge;
+    } else if (crashed) {
+      fitness /= 10;
+    }
   }
+
+
 
   public void show() {
     sketch.push();
@@ -102,7 +95,7 @@ public class Rocket {
     sketch.rotate(velocity.heading());
 //    sketch.rectMode(PConstants.CENTER);
 //    sketch.rect(0,0,60,10);
-    sketch.triangle(25,5,15,0,15,10);
+    sketch.triangle(50,5,15,0,15,10);
     sketch.pop();
   }
 
