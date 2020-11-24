@@ -15,19 +15,19 @@ public class Cell {
   int manhattanDistance = -1;
 
 
-  int row;
   int col;
+  int row;
   int size;
-  public Cell(PApplet sketch, int row, int col, int size) {
+  public Cell(PApplet sketch, int col, int row, int size) {
     this.sketch = sketch;
-    this.row = row;
     this.col = col;
+    this.row = row;
     this.size = size;
   }
 
   public void show() {
-    int x = row * size;
-    int y = col * size;
+    int x = col * size;
+    int y = row * size;
     //System.out.println("Cell's x: " + x + "    Cells y: " + y);
     sketch.stroke(255);
 
@@ -65,16 +65,16 @@ public class Cell {
   }
 
   public void highlightTarget() {
-    int x = row * size;
-    int y = col * size;
+    int x = col * size;
+    int y = row * size;
     sketch.fill(0,0,0);
     sketch.rect(x, y, size, size);
   }
 
 
   public void highlight() {
-    int x = row * size;
-    int y = col * size;
+    int x = col * size;
+    int y = row * size;
     sketch.noStroke();
     sketch.fill(255,0,0, 100);
     sketch.rect(x, y, size, size);
@@ -82,8 +82,8 @@ public class Cell {
   }
 
   public void calcManhattanDistance(Cell target) {
-    int vertical = Math.abs(this.row - target.row);
-    int horizontal = Math.abs(this.col - target.col);
+    int vertical = Math.abs(this.col - target.col);
+    int horizontal = Math.abs(this.row - target.row);
     manhattanDistance = vertical + horizontal;
   }
 
@@ -95,5 +95,9 @@ public class Cell {
             ", isExplored=" + isExplored +
             ", manhattanDistance=" + manhattanDistance +
             '}';
+  }
+
+  public String get2dIndex() {
+    return String.format("col: %s row: %s", col, row);
   }
 }

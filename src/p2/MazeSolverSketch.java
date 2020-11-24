@@ -10,13 +10,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MazeSolverSketch extends PApplet {
 
     int  background_color = color (50);
-    int squareSize = 50;
+    int squareSize = 20;
     Maze maze;
     Cell current;
     List<Cell> start = new ArrayList<>();
     Stack<Cell> visitedCells = new Stack<>();
     boolean generationCompleted = false;
-    boolean solved = false;
     Cell target;
 
     Solver solver;
@@ -48,6 +47,7 @@ public class MazeSolverSketch extends PApplet {
         }
 
     if (!generationCompleted) {
+
         List<Cell> neighbours = maze.getNeighbours(current);
         Cell next = null;
         if (neighbours.size() > 0 ) next = neighbours.get(ThreadLocalRandom.current().nextInt(neighbours.size()));
@@ -64,18 +64,24 @@ public class MazeSolverSketch extends PApplet {
         } else if (!visitedCells.empty()) {
             // 2.2.1 + 2.2.2
             current = visitedCells.pop();
+
         } else  {
             generationCompleted = true;
-            frameRate(1);
+            //frameRate(10);
             solver = new Solver(maze, algorithm, start, target);
             for (Cell cell : maze.cells) {
                 cell.calcManhattanDistance(target);
             }
+            System.out.println("Generation done. Solver init done.");
         }
+        current.highlight();
+
     }
 
-        current.highlight();
-    if (generationCompleted && !solved) {
+    if (generationCompleted && !maze.solved) {
+        for (Cell cell : solver.current) {
+            cell.highlight();
+        }
         target.highlight();
         solver.calcNextStep();
 

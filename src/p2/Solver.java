@@ -5,15 +5,16 @@ import java.util.List;
 
 public class Solver {
 
-  private Maze maze;
-  private List<Cell> start;
-  private Cell target;
-  private List<Cell> current;
+  Maze maze;
+  List<Cell> start;
+  Cell target;
+  List<Cell> current;
   Algorithm algorithm;
   List<Cell> closedList = new ArrayList<>();
-  List<Cell> openList;
+  List<Cell> openList = new ArrayList<>();
   List<Cell> next;
   boolean solved = false;
+  int step = 0;
 
 
 
@@ -29,16 +30,28 @@ public class Solver {
   }
 
   public void calcNextStep() {
-    openList = new ArrayList<>();
+    step++;
+    System.out.println("-----------" + step + "----------");
+    System.out.println("Current: " + current.get(0).get2dIndex());
     for (Cell cell : current) {
-      openList.addAll(maze.getReachableNeighbours(cell));
+      openList.addAll(maze.getUnexploredReachableNeighbours(cell));
     }
+    for (Cell cell : openList) {
+      System.out.println("OpenList: " + cell.get2dIndex());
+    }
+    for (Cell cell : closedList) {
+      System.out.println("OpenList: " + cell.get2dIndex());
+    }
+    System.out.println("----------------------");
     next = algorithm.calcNextStep(openList, current, target);
     current = next;
+    current.forEach(cell -> cell.isExplored = true);
+
     openList.removeAll(next);
     closedList.addAll(openList);
-
-
-    //return null;
+    if (current.contains(target)) {
+      System.out.println("Maze solved!");
+      maze.solved = true;
+    }
   }
 }

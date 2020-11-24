@@ -3,6 +3,7 @@ package p2;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static processing.core.PApplet.floor;
@@ -30,10 +31,10 @@ public class Maze {
   // index = i + j *cols
   public List<Cell> getNeighbours(Cell current) {
     List<Cell> neighbours = new ArrayList<>();
-    int topIndex = getIndex(current.row, current.col - 1);
-    int rightIndex = getIndex(current.row + 1, current.col);
-    int bottomIndex = getIndex(current.row, current.col + 1);
-    int leftIndex = getIndex(current.row - 1, current.col);
+    int topIndex = getIndex(current.col, current.row - 1);
+    int rightIndex = getIndex(current.col + 1, current.row);
+    int bottomIndex = getIndex(current.col, current.row + 1);
+    int leftIndex = getIndex(current.col - 1, current.row);
 
     if (topIndex != -1 && !cells.get(topIndex).visited) neighbours.add(cells.get(topIndex));
     if (rightIndex != -1 && !cells.get(rightIndex).visited) neighbours.add(cells.get(rightIndex));
@@ -43,14 +44,18 @@ public class Maze {
     return neighbours;
   }
 
-  public List<Cell> getReachableNeighbours(Cell current) {
+  public List<Cell> getUnexploredReachableNeighbours(Cell current) {
     List<Cell> reachable = new ArrayList<>();
+    System.out.println("current col + row: " + current.row + " " + current.col + Arrays.toString(current.walls));
+      if (!current.walls[0]) reachable.add(cells.get(getIndex(current.col, current.row - 1)));
+      if (!current.walls[1]) reachable.add(cells.get(getIndex(current.col + 1, current.row)));
+      if (!current.walls[2]) reachable.add(cells.get(getIndex(current.col, current.row + 1)));
+      if (!current.walls[3]) reachable.add(cells.get(getIndex(current.col - 1, current.row)));
 
-      if (!current.walls[0]) reachable.add(cells.get(getIndex(current.row, current.col - 1)));
-      if (!current.walls[1]) reachable.add(cells.get(getIndex(current.row + 1, current.col)));
-      if (!current.walls[2]) reachable.add(cells.get(getIndex(current.row, current.col + 1)));
-      if (!current.walls[3]) reachable.add(cells.get(getIndex(current.row - 1, current.col - 1)));
-
+    reachable.removeIf(cell -> cell.isExplored);
+    for (Cell cell : reachable) {
+      System.out.println("Unexplored neighbour of " + current.get2dIndex() + " --> " + cell.get2dIndex() );
+    }
 
 
     return reachable;
@@ -63,7 +68,7 @@ public class Maze {
   }
 
   public void removeWall(Cell current, Cell next) {
-    int positioning = current.row - next.row;
+    int positioning = current.col - next.col;
     if (positioning == -1) {
       current.walls[1] = false;
       next.walls[3] = false;
@@ -71,7 +76,7 @@ public class Maze {
       current.walls[3] = false;
       next.walls[1] = false;
     } else {
-      positioning = current.col - next.col;
+      positioning = current.row - next.row;
       if (positioning == -1 ) {
         current.walls[2] = false;
         next.walls[0] = false;
