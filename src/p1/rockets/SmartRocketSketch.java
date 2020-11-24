@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MySketch extends PApplet{
+public class SmartRocketSketch extends PApplet{
 
 
   Population population;
@@ -23,6 +23,10 @@ public class MySketch extends PApplet{
 
   public void settings(){
     size(1000, 600);
+
+  }
+
+  public void setup() {
     START_POS = new PVector(width / 2f, height - height / 4f);
     target = new Target(this);
     population = new Population(this, LIFESPAN, MUTATION_RATE, POP_SIZE, target, SELECTION_METHOD, START_POS);
@@ -66,7 +70,7 @@ public class MySketch extends PApplet{
 
   public static void main(String[] args){
     String[] processingArgs = {"p1.rockets.MySketch"};
-    MySketch mySketch = new MySketch();
-    PApplet.runSketch(processingArgs, mySketch);
+    SmartRocketSketch smartRocketSketch = new SmartRocketSketch();
+    PApplet.runSketch(processingArgs, smartRocketSketch);
   }
 }
