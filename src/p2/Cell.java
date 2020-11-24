@@ -2,6 +2,8 @@ package p2;
 
 import processing.core.*;
 
+import java.util.Arrays;
+
 public class Cell {
 
   PApplet sketch;
@@ -83,5 +85,15 @@ public class Cell {
     int vertical = Math.abs(this.row - target.row);
     int horizontal = Math.abs(this.col - target.col);
     manhattanDistance = vertical + horizontal;
+  }
+
+  @Override
+  public String toString() {
+    return "Cell{" +
+            "walls=" + Arrays.toString(walls) +
+            ", visited=" + visited +
+            ", isExplored=" + isExplored +
+            ", manhattanDistance=" + manhattanDistance +
+            '}';
   }
 }

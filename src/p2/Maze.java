@@ -4,7 +4,6 @@ import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static processing.core.PApplet.floor;
 
@@ -44,18 +43,15 @@ public class Maze {
     return neighbours;
   }
 
-  public List<Cell> getReachableNeighbours(List<Cell> current) {
+  public List<Cell> getReachableNeighbours(Cell current) {
     List<Cell> reachable = new ArrayList<>();
 
-    for (Cell cell : current) {
-      if (!cell.walls[0]) reachable.add(cells.get(getIndex(cell.row, cell.col - 1)));
-      if (!cell.walls[1]) reachable.add(cells.get(getIndex(cell.row + 1, cell.col)));
-      if (!cell.walls[2]) reachable.add(cells.get(getIndex(cell.row, cell.col + 1)));
-      if (!cell.walls[3]) reachable.add(cells.get(getIndex(cell.row - 1, cell.col - 1)));
-    }
-    for (Cell cell : reachable) {
-      cell.isExplored = true;
-    }
+      if (!current.walls[0]) reachable.add(cells.get(getIndex(current.row, current.col - 1)));
+      if (!current.walls[1]) reachable.add(cells.get(getIndex(current.row + 1, current.col)));
+      if (!current.walls[2]) reachable.add(cells.get(getIndex(current.row, current.col + 1)));
+      if (!current.walls[3]) reachable.add(cells.get(getIndex(current.row - 1, current.col - 1)));
+
+
 
     return reachable;
   }

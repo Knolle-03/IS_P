@@ -2,6 +2,7 @@ package p2;
 
 import processing.core.PApplet;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,9 +13,10 @@ public class MazeSolverSketch extends PApplet {
     int squareSize = 50;
     Maze maze;
     Cell current;
+    List<Cell> start = new ArrayList<>();
     Stack<Cell> visitedCells = new Stack<>();
     boolean generationCompleted = false;
-    Cell start;
+    boolean solved = false;
     Cell target;
 
     Solver solver;
@@ -34,7 +36,7 @@ public class MazeSolverSketch extends PApplet {
         // STEP 1
         current = maze.cells.get(0);
         current.visited = true;
-        start = current;
+        start.add(current);
         target = maze.cells.get(ThreadLocalRandom.current().nextInt(maze.cells.size()));
     }
 
@@ -64,6 +66,7 @@ public class MazeSolverSketch extends PApplet {
             current = visitedCells.pop();
         } else  {
             generationCompleted = true;
+            frameRate(1);
             solver = new Solver(maze, algorithm, start, target);
             for (Cell cell : maze.cells) {
                 cell.calcManhattanDistance(target);
@@ -72,10 +75,10 @@ public class MazeSolverSketch extends PApplet {
     }
 
         current.highlight();
-    if (generationCompleted && !maze.solved) {
+    if (generationCompleted && !solved) {
         target.highlight();
         solver.calcNextStep();
-        System.out.println("log");
+
     }
 
 
