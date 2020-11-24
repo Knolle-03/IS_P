@@ -12,6 +12,7 @@ public class Maze {
   PApplet sketch;
   int rows;
   int cols;
+  boolean solved = false;
   List<Cell> cells = new ArrayList<>();
 
 
@@ -28,7 +29,7 @@ public class Maze {
   }
 
   // index = i + j *cols
-  public Cell getRandomNeighbour(Cell current) {
+  public List<Cell> getNeighbours(Cell current) {
     List<Cell> neighbours = new ArrayList<>();
     int topIndex = getIndex(current.row, current.col - 1);
     int rightIndex = getIndex(current.row + 1, current.col);
@@ -40,8 +41,23 @@ public class Maze {
     if (bottomIndex != -1 && !cells.get(bottomIndex).visited) neighbours.add(cells.get(bottomIndex));
     if (leftIndex != -1 && !cells.get(leftIndex).visited) neighbours.add(cells.get(leftIndex));
 
-    if (neighbours.size() > 0 ) return neighbours.get(ThreadLocalRandom.current().nextInt(neighbours.size()));
-    return null;
+    return neighbours;
+  }
+
+  public List<Cell> getReachableNeighbours(List<Cell> current) {
+    List<Cell> reachable = new ArrayList<>();
+
+    for (Cell cell : current) {
+      if (!cell.walls[0]) reachable.add(cells.get(getIndex(cell.row, cell.col - 1)));
+      if (!cell.walls[1]) reachable.add(cells.get(getIndex(cell.row + 1, cell.col)));
+      if (!cell.walls[2]) reachable.add(cells.get(getIndex(cell.row, cell.col + 1)));
+      if (!cell.walls[3]) reachable.add(cells.get(getIndex(cell.row - 1, cell.col - 1)));
+    }
+    for (Cell cell : reachable) {
+      cell.isExplored = true;
+    }
+
+    return reachable;
   }
 
 
