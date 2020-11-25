@@ -1,5 +1,6 @@
 package p2;
 
+import p2.algorithms.Algorithm;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MazeSolverSketch extends PApplet {
 
     int  background_color = color (50);
-    int squareSize = 20;
+    int squareSize = 40;
     Maze maze;
     Cell current;
     List<Cell> start = new ArrayList<>();
@@ -18,25 +19,25 @@ public class MazeSolverSketch extends PApplet {
     boolean generationCompleted = false;
     Cell target;
 
-    Solver solver;
-    Algorithm algorithm = AlgorithmFactory.getAlgorithm("GBFS");
+    Algorithm algorithm;
 
 
 
     public void settings() {
-        size(600, 400);
+        size(800, 600);
     }
 
     @Override
     public void setup() {
-        frameRate(120);
+        frameRate(240);
         maze = new Maze(this, width, height, squareSize);
 
         // STEP 1
         current = maze.cells.get(0);
         current.visited = true;
         start.add(current);
-        target = maze.cells.get(ThreadLocalRandom.current().nextInt(maze.cells.size()));
+        //target = maze.cells.get(ThreadLocalRandom.current().nextInt(maze.cells.size()));
+        target = maze.cells.get(maze.cells.size() - 1);
     }
 
     public void draw() {
@@ -67,23 +68,22 @@ public class MazeSolverSketch extends PApplet {
 
         } else  {
             generationCompleted = true;
-            //frameRate(10);
-            solver = new Solver(maze, algorithm, start, target);
+            frameRate(10);
             for (Cell cell : maze.cells) {
                 cell.calcManhattanDistance(target);
             }
-            System.out.println("Generation done. Solver init done.");
+            algorithm = AlgorithmFactory.getAlgorithm("GBFS", maze);
+            System.out.println("Generation done.");
         }
         current.highlight();
 
     }
 
     if (generationCompleted && !maze.solved) {
-        for (Cell cell : solver.current) {
-            cell.highlight();
-        }
-        target.highlight();
-        solver.calcNextStep();
+
+        System.out.println("Calling calcNextStep From Sketch.");
+        algorithm.calcNextStep();
+
 
     }
 

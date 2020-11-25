@@ -44,19 +44,13 @@ public class Maze {
     return neighbours;
   }
 
-  public List<Cell> getUnexploredReachableNeighbours(Cell current) {
+  public List<Cell> getReachableNeighbours(Cell current) {
     List<Cell> reachable = new ArrayList<>();
     System.out.println("current col + row: " + current.row + " " + current.col + Arrays.toString(current.walls));
       if (!current.walls[0]) reachable.add(cells.get(getIndex(current.col, current.row - 1)));
       if (!current.walls[1]) reachable.add(cells.get(getIndex(current.col + 1, current.row)));
       if (!current.walls[2]) reachable.add(cells.get(getIndex(current.col, current.row + 1)));
       if (!current.walls[3]) reachable.add(cells.get(getIndex(current.col - 1, current.row)));
-
-    reachable.removeIf(cell -> cell.isExplored);
-    for (Cell cell : reachable) {
-      System.out.println("Unexplored neighbour of " + current.get2dIndex() + " --> " + cell.get2dIndex() );
-    }
-
 
     return reachable;
   }
@@ -88,5 +82,35 @@ public class Maze {
   }
 
 
+  public boolean isSolved() {
+    return solved;
+  }
 
+  public void setSolved(boolean solved) {
+    this.solved = solved;
+  }
+
+  public int getRows() {
+    return rows;
+  }
+
+  public void setRows(int rows) {
+    this.rows = rows;
+  }
+
+  public int getCols() {
+    return cols;
+  }
+
+  public void setCols(int cols) {
+    this.cols = cols;
+  }
+
+  public List<Cell> getCells() {
+    return cells;
+  }
+
+  public void setCells(List<Cell> cells) {
+    this.cells = cells;
+  }
 }
