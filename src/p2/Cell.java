@@ -36,7 +36,8 @@ public class Cell {
     int x = col * size;
     int y = row * size;
     //System.out.println("Cell's x: " + x + "    Cells y: " + y);
-    sketch.stroke(255);
+    sketch.stroke(0);
+    sketch.strokeWeight(5);
 
     // top
     if (walls[0]) sketch.line(x, y, x + size, y);
@@ -73,7 +74,6 @@ public class Cell {
       sketch.stroke(0);
       sketch.fill(0);
       sketch.circle(x + size / 2f,y + size / 2f,size / 2f);
-      System.out.println("Size in isCurrent draw(): " + size + "\nCol: " + x + " | Row: " + y);
       sketch.noFill();
     }
 
@@ -93,25 +93,24 @@ public class Cell {
     if (isPartOfPath) {
       sketch.noStroke();
       sketch.fill(0, 255, 0, 255);
-      sketch.rect(x + size / 10f, y + size / 10f, size - 2 * (size / 10f), size - 2 * (size / 10f));
+      sketch.rect(x + size / 5f, y + size / 5f, size - 2 * (size / 5f), size - 2 * (size / 5f));
     }
 
-
-
-
-
   }
 
 
 
-  public void highlight() {
-    int x = col * size;
-    int y = row * size;
-    sketch.noStroke();
-    sketch.fill(255,0,0, 100);
-    sketch.rect(x, y, size, size);
 
-  }
+
+
+//  public void highlight() {
+//    int x = col * size;
+//    int y = row * size;
+//    sketch.noStroke();
+//    sketch.fill(255,0,0, 100);
+//    sketch.rect(x, y, size, size);
+//
+//  }
 
   public void calcManhattanDistance(Cell target) {
     int vertical = Math.abs(this.col - target.col);

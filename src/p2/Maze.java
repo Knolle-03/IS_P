@@ -61,6 +61,51 @@ public class Maze {
     return i + j * cols;
   }
 
+  public void removeRandomWall(Cell cell) {
+    int neighbourIndex;
+    for (int i = 0; i < cell.walls.length; i++) {
+      if (cell.walls[i]) {
+        if (i == 0) {
+          neighbourIndex = getIndex(cell.col, cell.row - 1);
+          // has valid top neighbour
+          if (neighbourIndex != -1) {
+            cell.walls[0] = false;
+            cells.get(neighbourIndex).walls[2] = false;
+            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            return;
+          }
+        } else if (i == 1) {
+          neighbourIndex = getIndex(cell.col + 1, cell.row);
+          // has valid right neighbour
+          if (neighbourIndex != -1) {
+            cell.walls[1] = false;
+            cells.get(neighbourIndex).walls[3] = false;
+            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            return;
+          }
+        }else if (i == 2) {
+          neighbourIndex = getIndex(cell.col, cell.row + 1);
+          // has valid bottom neighbour
+          if (neighbourIndex != -1) {
+            cell.walls[2] = false;
+            cells.get(neighbourIndex).walls[0] = false;
+            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            return;
+          }
+        }else if (i == 3) {
+          neighbourIndex = getIndex(cell.col - 1, cell.row);
+          // has valid left neighbour
+          if (neighbourIndex != -1) {
+            cell.walls[3] = false;
+            cells.get(neighbourIndex).walls[1] = false;
+            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            return;
+          }
+        }
+      }
+    }
+  }
+
   public void removeWall(Cell current, Cell next) {
     int positioning = current.col - next.col;
     if (positioning == -1) {
