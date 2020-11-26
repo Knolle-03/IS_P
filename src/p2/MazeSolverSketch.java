@@ -14,7 +14,7 @@ public class MazeSolverSketch extends PApplet {
     Map<Integer, String> algorithms = ofEntries(entry(0, "BreadthFS"),
                                                 entry(1, "BestFS"));
 
-    String ALGORITHM_NAME = algorithms.get(0);
+    String ALGORITHM_NAME = algorithms.get(1);
     int background_color = color (50);
     int squareSize = 50;
     Maze maze;

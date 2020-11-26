@@ -27,7 +27,6 @@ public class BestFirstSearch implements Algorithm {
         start.setCurrent(true);
         openList.add(start);
         minCostCell = start;
-
     }
 
 
