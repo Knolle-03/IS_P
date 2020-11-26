@@ -13,9 +13,10 @@ public class MazeSolverSketch extends PApplet {
     // map to choose an algorithm by id
     Map<Integer, String> algorithms = ofEntries(
             entry(0, "BreadthFS"),
-            entry(1, "BestFS"));
+            entry(1, "BestFS"),
+            entry(2, "DepthFS"));
 
-    String ALGORITHM_NAME = algorithms.get(0);
+    String ALGORITHM_NAME = algorithms.get(2);
     int background_color = color (50);
     int squareSize = 50;
     Maze maze;
@@ -77,7 +78,7 @@ public class MazeSolverSketch extends PApplet {
 
             } else {
                 generationCompleted = true;
-                frameRate(10);
+                frameRate(5);
                 for (Cell cell : maze.cells) {
                     cell.calcManhattanDistance(target);
                 }
