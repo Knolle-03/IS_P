@@ -10,15 +10,20 @@ import static java.util.Map.*;
 
 public class MazeSolverSketch extends PApplet {
 
+    int GENERATION_FPS = 120;
+    int SOLVE_FPS = 2;
+
     // map to choose an algorithm by id
     Map<Integer, String> algorithms = ofEntries(
-            entry(0, "BreadthFS"),
-            entry(1, "BestFS"),
-            entry(2, "DepthFS"));
+            entry(0, "BFS"),
+            entry(1, "GBFS"),
+            entry(2, "A*"),
+            entry(3, "DFS"),
+            entry(4, "IDS"));
 
-    String ALGORITHM_NAME = algorithms.get(2);
+    String ALGORITHM_NAME = algorithms.get(3);
     int background_color = color (50);
-    int squareSize = 50;
+    int squareSize = 60;
     Maze maze;
     Cell current;
     List<Cell> start = new ArrayList<>();
@@ -32,12 +37,12 @@ public class MazeSolverSketch extends PApplet {
 
 
     public void settings() {
-        size(1000, 800);
+        size(900, 600);
     }
 
     @Override
     public void setup() {
-        frameRate(240);
+        frameRate(GENERATION_FPS);
         maze = new Maze(this, width, height, squareSize);
         additionalWallRemoves = floor(width / (float) squareSize * height / (float) squareSize * 0.1f);
         System.out.println("Cell count: " + width / squareSize * height / squareSize + " removes: " + additionalWallRemoves);
@@ -59,11 +64,14 @@ public class MazeSolverSketch extends PApplet {
 
         if (!generationCompleted) {
 
+
             List<Cell> neighbours = maze.getNeighbours(current);
             Cell next = null;
             if (neighbours.size() > 0) next = neighbours.get(ThreadLocalRandom.current().nextInt(neighbours.size()));
+
             //STEP 2.1.1
             if (next != null) {
+                next.highlight();
                 // STEP 2.1.2
                 visitedCells.push(current);
                 // STEP 2.1.3
@@ -78,7 +86,7 @@ public class MazeSolverSketch extends PApplet {
 
             } else {
                 generationCompleted = true;
-                frameRate(5);
+                frameRate(SOLVE_FPS);
                 for (Cell cell : maze.cells) {
                     cell.calcManhattanDistance(target);
                 }

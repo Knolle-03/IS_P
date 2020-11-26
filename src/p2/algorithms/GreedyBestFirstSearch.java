@@ -6,7 +6,7 @@ import p2.Maze;
 
 import java.util.*;
 
-public class BestFirstSearch implements Algorithm {
+public class GreedyBestFirstSearch implements Algorithm {
 
     Maze maze;
     List<Cell> openList = new ArrayList<>();
@@ -17,7 +17,7 @@ public class BestFirstSearch implements Algorithm {
     Map<Cell, Cell> nextToPrevMap = new HashMap<>();
     Cell minCostCell;
 
-    public BestFirstSearch(Maze maze) {
+    public GreedyBestFirstSearch(Maze maze) {
         this.maze = maze;
         current = maze.getCells().get(0);
         target = maze.getCells().get(maze.getCells().size() - 1);
@@ -43,21 +43,21 @@ public class BestFirstSearch implements Algorithm {
         // STEP 2
         if (minCostCell == target) {
             maze.setSolved(true);
-            for (Cell cell : openList) {
-                System.out.println("open list: " + cell.get2dIndex());
-            }
-            for (Cell cell : closedList) {
-                System.out.println("closed list: " + cell.get2dIndex());
-            }
-            for (Map.Entry<Cell, Cell> entry : nextToPrevMap.entrySet()) {
-                System.out.println("prevToNextMap: " + entry.getKey().get2dIndex() + " <==  " + entry.getValue().get2dIndex());
-            }
-            System.out.println("Current: " + current.get2dIndex());
-            System.out.println("MAP: " + nextToPrevMap.toString());
+//            for (Cell cell : openList) {
+//                System.out.println("open list: " + cell.get2dIndex());
+//            }
+//            for (Cell cell : closedList) {
+//                System.out.println("closed list: " + cell.get2dIndex());
+//            }
+//            for (Map.Entry<Cell, Cell> entry : nextToPrevMap.entrySet()) {
+//                System.out.println("prevToNextMap: " + entry.getKey().get2dIndex() + " <==  " + entry.getValue().get2dIndex());
+//            }
+//            System.out.println("Current: " + current.get2dIndex());
+//            System.out.println("MAP: " + nextToPrevMap.toString());
             System.out.println("MAZE SOLVED!!!");
             Cell curr = target;
             while (curr != start) {
-                System.out.println(curr.get2dIndex());
+                System.out.print(curr.get2dIndex() + " <== ");
                 curr.setPartOfPath(true);
                 curr = nextToPrevMap.get(curr);
             }
@@ -82,6 +82,7 @@ public class BestFirstSearch implements Algorithm {
             }
             else if(neighbour.getCostOfReach() > minCostCell.getCostOfReach() + 1) {
                 nextToPrevMap.put(minCostCell, neighbour);
+                //neighbour.setCostOfReach(minCostCell.getCostOfReach() + 1);
             }
         }
     }

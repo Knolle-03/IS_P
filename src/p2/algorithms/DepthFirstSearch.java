@@ -33,19 +33,11 @@ public class DepthFirstSearch implements Algorithm {
     public void calcNextStep() {
         if (current == target) {
             maze.setSolved(true);
-            for (Cell cell : openList) {
-                System.out.println("open list: " + cell.get2dIndex());
-            }
-            for (Cell cell : closedList) {
-                System.out.println("closed list: " + cell.get2dIndex());
-            }
             lastCurrent.setCurrent(false);
             current.setCurrent(true);
             current.setInClosedList(true);
             current.setInOpenList(false);
-            System.out.println("Current: " + current.get2dIndex());
             System.out.println("MAZE SOLVED!!!");
-            return;
         } else {
             System.out.println("Current:" + current.toString());
             current.setInOpenList(false);

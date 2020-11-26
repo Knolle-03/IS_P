@@ -46,7 +46,7 @@ public class Maze {
 
   public List<Cell> getReachableNeighbours(Cell current) {
     List<Cell> reachable = new ArrayList<>();
-    System.out.println("current col + row: " + current.row + " " + current.col + Arrays.toString(current.walls));
+    //System.out.println("current col + row: " + current.row + " " + current.col + Arrays.toString(current.walls));
       if (!current.walls[0]) reachable.add(cells.get(getIndex(current.col, current.row - 1)));
       if (!current.walls[1]) reachable.add(cells.get(getIndex(current.col + 1, current.row)));
       if (!current.walls[2]) reachable.add(cells.get(getIndex(current.col, current.row + 1)));

@@ -53,21 +53,30 @@ public class Cell {
     if (visited) {
       sketch.noStroke();
       sketch.fill(255, 100);
+      sketch.rectMode(PConstants.CORNER);
       sketch.rect(x, y, size, size);
     }
 
     if (manhattanDistance != -1) {
-      sketch.stroke(255, 0, 0, 255);
+      sketch.fill(255);
+      sketch.stroke(0, 255);
       sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
       //sketch.textSize();
-      sketch.text(manhattanDistance, x + size / 2f, y + size / 2f);
+      sketch.text(manhattanDistance, x + 3 * (size / 4f), y + size / 4f);
     }
 
     if (costOfReach != -1) {
-      sketch.stroke(0,0 , 255, 255);
+      sketch.stroke(0, 255);
       sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
       //sketch.textSize();
-      sketch.text(costOfReach, x + size / 1.3f, y + size / 1.3f);
+      sketch.text(costOfReach, x + size / 4f, y + size / 4f);
+    }
+
+    if (costOfReach != -1) {
+      sketch.stroke(0, 255);
+      sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+      //sketch.textSize();
+      sketch.text(getEstimatedTotalCost(), x + size / 2f, y + size / 2f);
     }
 
     if (isCurrent) {
@@ -86,14 +95,16 @@ public class Cell {
 //
     if (inOpenList) {
       sketch.noStroke();
-      sketch.fill(0, 0, 255, 50);
+      sketch.fill(0, 0, 255, 100);
+      sketch.rectMode(PConstants.CORNER);
       sketch.rect(x, y, size, size);
     }
 
     if (isPartOfPath) {
       sketch.noStroke();
       sketch.fill(0, 255, 0, 255);
-      sketch.rect(x + size / 5f, y + size / 5f, size - 2 * (size / 5f), size - 2 * (size / 5f));
+      sketch.rectMode(PConstants.CENTER);
+      sketch.rect(x + size / 2f, y + 3* (size / 4f), size - 4 * (size / 5f), size - 4 * (size / 5f));
     }
 
   }
@@ -103,14 +114,14 @@ public class Cell {
 
 
 
-//  public void highlight() {
-//    int x = col * size;
-//    int y = row * size;
-//    sketch.noStroke();
-//    sketch.fill(255,0,0, 100);
-//    sketch.rect(x, y, size, size);
-//
-//  }
+  public void highlight() {
+    int x = col * size;
+    int y = row * size;
+    sketch.noStroke();
+    sketch.fill(255,0,0, 100);
+    sketch.rect(x, y, size, size);
+
+  }
 
   public void calcManhattanDistance(Cell target) {
     int vertical = Math.abs(this.col - target.col);
@@ -135,6 +146,7 @@ public class Cell {
 
   //############# Getters and Setters ###################
 
+  public int getEstimatedTotalCost() { return getCostOfReach() + getManhattanDistance(); }
 
   public boolean isPartOfPath() {
     return isPartOfPath;
