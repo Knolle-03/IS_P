@@ -124,7 +124,10 @@ public class Cell {
             "walls=" + Arrays.toString(walls) +
             ", visited=" + visited +
             ", isExplored=" + isExplored +
+            ", inClosedList=" + inClosedList +
+            ", inOpenList=" + inOpenList +
             ", manhattanDistance=" + manhattanDistance +
+            ", costOfReach=" + costOfReach +
             ", col=" + col +
             ", row=" + row +
             '}';

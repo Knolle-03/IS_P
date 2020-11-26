@@ -11,10 +11,13 @@ import static java.util.Map.*;
 public class MazeSolverSketch extends PApplet {
 
     // map to choose an algorithm by id
-    Map<Integer, String> algorithms = ofEntries(entry(0, "BreadthFS"),
-                                                entry(1, "BestFS"));
+    Map<Integer, String> algorithms = ofEntries(
+            entry(0, "BreadthFS"),
+            entry(1, "BestFS"),
+            entry(2, "IDS"),
+            entry(3, "IDSWR"));
 
-    String ALGORITHM_NAME = algorithms.get(1);
+    String ALGORITHM_NAME = algorithms.get(3);
     int background_color = color (50);
     int squareSize = 50;
     Maze maze;
@@ -27,6 +30,8 @@ public class MazeSolverSketch extends PApplet {
     Algorithm algorithm;
     int additionalWallRemoves;
 
+    int IdsRound = 1;
+    int IdsCounter = 0;
 
 
     public void settings() {
@@ -92,7 +97,20 @@ public class MazeSolverSketch extends PApplet {
         }
 
         if (generationCompleted && !maze.solved) {
-            algorithm.calcNextStep();
+            if (ALGORITHM_NAME == "IDSWR") {
+                if (IdsCounter == IdsRound) {
+                    algorithm.getCurrentCells();
+                    IdsCounter = 0;
+                    IdsRound++;
+                } else {
+                    System.out.println("----------------------------------------------------------");
+                    System.out.println("Round:" + IdsRound);
+                    algorithm.calcNextStep();
+                    IdsCounter++;
+                }
+            } else {
+                algorithm.calcNextStep();
+            }
         }
 
     }
