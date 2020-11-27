@@ -3,7 +3,6 @@ package p2;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static processing.core.PApplet.floor;

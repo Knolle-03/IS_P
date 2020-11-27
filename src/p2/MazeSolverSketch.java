@@ -11,7 +11,7 @@ import static java.util.Map.*;
 public class MazeSolverSketch extends PApplet {
 
     int GENERATION_FPS = 120;
-    int SOLVE_FPS = 2;
+    int SOLVE_FPS = 120;
 
     // map to choose an algorithm by id
     Map<Integer, String> algorithms = ofEntries(
@@ -19,11 +19,14 @@ public class MazeSolverSketch extends PApplet {
             entry(1, "GBFS"),
             entry(2, "A*"),
             entry(3, "DFS"),
-            entry(4, "IDS"));
+            entry(4, "IDA*"),
+            entry(5, "IDS"));
 
-    String ALGORITHM_NAME = algorithms.get(3);
+    String ALGORITHM_NAME = algorithms.get(4);
     int background_color = color (50);
-    int squareSize = 60;
+    int squareSize = 50;
+    int WIDTH = 3400;
+    int HEIGHT = 1300;
     Maze maze;
     Cell current;
     List<Cell> start = new ArrayList<>();
@@ -37,7 +40,7 @@ public class MazeSolverSketch extends PApplet {
 
 
     public void settings() {
-        size(900, 600);
+        size(WIDTH, HEIGHT, P3D);
     }
 
     @Override
@@ -45,7 +48,6 @@ public class MazeSolverSketch extends PApplet {
         frameRate(GENERATION_FPS);
         maze = new Maze(this, width, height, squareSize);
         additionalWallRemoves = floor(width / (float) squareSize * height / (float) squareSize * 0.1f);
-        System.out.println("Cell count: " + width / squareSize * height / squareSize + " removes: " + additionalWallRemoves);
 
         // STEP 1
         current = maze.cells.get(0);
@@ -53,6 +55,7 @@ public class MazeSolverSketch extends PApplet {
         start.add(current);
         //target = maze.cells.get(ThreadLocalRandom.current().nextInt(maze.cells.size()));
         target = maze.cells.get(maze.cells.size() - 1);
+        noLoop();
     }
 
     public void draw() {
@@ -63,6 +66,7 @@ public class MazeSolverSketch extends PApplet {
         }
 
         if (!generationCompleted) {
+            current.isCurrent = false;
 
 
             List<Cell> neighbours = maze.getNeighbours(current);
@@ -71,7 +75,6 @@ public class MazeSolverSketch extends PApplet {
 
             //STEP 2.1.1
             if (next != null) {
-                next.highlight();
                 // STEP 2.1.2
                 visitedCells.push(current);
                 // STEP 2.1.3
@@ -96,8 +99,9 @@ public class MazeSolverSketch extends PApplet {
                 }
                 algorithm = AlgorithmFactory.getAlgorithm(ALGORITHM_NAME, maze);
                 System.out.println("Generation done.");
+                noLoop();
             }
-            //current.highlight();
+            current.isCurrent = true;
 
         }
 

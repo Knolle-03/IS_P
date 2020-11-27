@@ -62,8 +62,10 @@ public class AStar implements Algorithm {
             // if not already in closed list
             if (!closedList.contains(neighbour)) {
                 // add to open list
-                openList.add(neighbour);
-                neighbour.setInOpenList(true);
+                if (!openList.contains(neighbour)){
+                    openList.add(neighbour);
+                    neighbour.setInOpenList(true);
+                }
                 // add cost of reach
                 if (neighbour.getCostOfReach() == -1 || neighbour.getCostOfReach() > minCostCell.getCostOfReach() + 1){
                     neighbour.setCostOfReach(minCostCell.getCostOfReach() + 1 );
