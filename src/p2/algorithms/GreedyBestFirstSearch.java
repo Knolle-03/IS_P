@@ -94,6 +94,13 @@ public class GreedyBestFirstSearch implements Algorithm {
         return current;
     }
 
+    @Override
+    public void solve() {
+        while (!maze.isSolved()) {
+            calcNextStep();
+        }
+    }
+
 
 
 

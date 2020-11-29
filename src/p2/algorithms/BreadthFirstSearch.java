@@ -86,4 +86,11 @@ public class BreadthFirstSearch implements Algorithm{
         current.add(this.current);
         return current;
     }
+
+    @Override
+    public void solve() {
+        while (!maze.isSolved()) {
+            calcNextStep();
+        }
+    }
 }

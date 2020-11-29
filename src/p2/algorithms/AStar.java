@@ -87,4 +87,11 @@ public class AStar implements Algorithm {
         return current;
     }
 
+    @Override
+    public void solve() {
+        while (!maze.isSolved()) {
+            calcNextStep();
+        }
+    }
+
 }

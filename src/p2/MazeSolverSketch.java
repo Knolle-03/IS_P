@@ -4,14 +4,17 @@ import p2.algorithms.Algorithm;
 import processing.core.PApplet;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.Map.*;
 
 public class MazeSolverSketch extends PApplet {
 
+    int background_color = color (50);
+
+    // draw loops per second while generating
     int GENERATION_FPS = 120;
-    int SOLVE_FPS = 120;
+    // draw loops per second during while solving
+    int SOLVE_FPS = 20;
 
     // map to choose an algorithm by id
     Map<Integer, String> algorithms = Map.ofEntries(
@@ -22,100 +25,121 @@ public class MazeSolverSketch extends PApplet {
             entry(4, "IDA*"),
             entry(5, "IDS"));
 
-    String ALGORITHM_NAME = algorithms.get(4);
-    int background_color = color (50);
-    int squareSize = 25;
+    // name of selected algorithm
+    String ALGORITHM_NAME = algorithms.get(1);
+    // size of each cell in pixels
+    int squareSize = 50;
+    // width of window
     int WIDTH = 3400;
-    int HEIGHT = 1300;
+    // height of window
+    int HEIGHT = 1200;
+    // display as fullscreen window
+    boolean fullscreen = false;
+
     Maze maze;
-    Cell current;
-    List<Cell> start = new ArrayList<>();
-    Stack<Cell> visitedCells = new Stack<>();
-    boolean generationCompleted = false;
+    boolean drawGeneration = false;
+    boolean drawAlgorithm = true;
+    boolean init = false;
     Cell target;
 
     Algorithm algorithm;
-    int additionalWallRemoves;
 
 
 
     public void settings() {
-        size(WIDTH, HEIGHT, P3D);
+        if (fullscreen) fullScreen(P3D);
+        else size(WIDTH, HEIGHT, P3D);
     }
 
     @Override
     public void setup() {
         frameRate(GENERATION_FPS);
-        maze = new Maze(this, width, height, squareSize);
-        additionalWallRemoves = floor(width / (float) squareSize * height / (float) squareSize * 0.1f);
 
-        // STEP 1
-        current = maze.cells.get(0);
-        current.visited = true;
-        start.add(current);
-        //target = maze.cells.get(ThreadLocalRandom.current().nextInt(maze.cells.size()));
+        // calc additional wall to remove (last float equals percentage i.e. 0.1 = 10%)
+        int additionalWallRemoves = floor(width / (float) squareSize * height / (float) squareSize * 0.1f);
+        // init new maze
+        maze = new Maze(this, width, height, squareSize, additionalWallRemoves);
+        // set target cell
         target = maze.cells.get(maze.cells.size() - 1);
-        noLoop();
+        // set algorithm to solve the maze
+        algorithm = AlgorithmFactory.getAlgorithm(ALGORITHM_NAME, maze);
+        // generate whole maze in setup if it should not be drawn
+        if (!drawGeneration) {
+            maze.generate();
+        }
+        // solve whole maze in setup if it should not be drawn
+        if (!drawAlgorithm) {
+            algorithm.solve();
+        }
+
     }
 
     public void draw() {
+        // draw background every frame
         background(background_color);
 
-        for (Cell cell : maze.cells) {
-            cell.show();
-        }
+        // if maze is not fully generated
+        if (drawGeneration && !maze.generationCompleted ){
+            // generate next cell
+            maze.nextStep();
 
-        if (!generationCompleted) {
-            current.isCurrent = false;
-
-
-            List<Cell> neighbours = maze.getNeighbours(current);
-            Cell next = null;
-            if (neighbours.size() > 0) next = neighbours.get(ThreadLocalRandom.current().nextInt(neighbours.size()));
-
-            //STEP 2.1.1
-            if (next != null) {
-                // STEP 2.1.2
-                visitedCells.push(current);
-                // STEP 2.1.3
-                maze.removeWall(current, next);
-                // STEP 2.1.4
-                current = next;
-                current.visited = true;
-                // STEP 2.2.0
-            } else if (!visitedCells.empty()) {
-                // 2.2.1 + 2.2.2
-                current = visitedCells.pop();
-
-            } else {
-                generationCompleted = true;
-                frameRate(SOLVE_FPS);
+            // if generation should be drawn
+            if (drawGeneration) {
+                // draw each cell
                 for (Cell cell : maze.cells) {
-                    cell.calcManhattanDistance(target);
+                    cell.show();
                 }
-                for (int i = 0; i < additionalWallRemoves; i++) {
-                    int cellIndex = ThreadLocalRandom.current().nextInt(maze.cells.size());
-                    maze.removeRandomWall(maze.getCells().get(cellIndex));
-                }
-                algorithm = AlgorithmFactory.getAlgorithm(ALGORITHM_NAME, maze);
-                System.out.println("Generation done.");
-                noLoop();
             }
-            current.isCurrent = true;
+        }
+
+        // if maze generation is done (do once)
+        if (maze.generationCompleted && !init) {
+            init = true;
+            // calc manhattan distance of each cell
+            for (Cell cell : maze.cells) {
+                cell.calcManhattanDistance(target);
+            }
+            frameRate(SOLVE_FPS);
+            System.out.println("Generation done.");
+            // stop draw loop in starting position.
 
         }
 
-        if (generationCompleted && !maze.solved) {
+        // while maze is being solved
+        if (drawAlgorithm && maze.generationCompleted && !maze.solved) {
+
+            // calc next step
             algorithm.calcNextStep();
+
+            // if solving should be drawn
+            if (drawAlgorithm) {
+                //draw  each cell
+                for (Cell cell : maze.cells) {
+                    cell.show();
+                }
+            }
+
+        }
+
+        // when maze is solved
+        if (maze.generationCompleted && maze.solved) {
+            for (Cell cell : maze.cells) {
+                cell.show();
+            }
         }
 
     }
+
+
+
+
+
+
+
     @Override
     public void mousePressed() {
         looping = !looping;
     }
-
-
 
     public static void main(String[] args){
         String[] processingArgs = {"MySketch"};

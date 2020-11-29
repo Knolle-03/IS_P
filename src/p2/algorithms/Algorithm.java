@@ -9,4 +9,5 @@ import java.util.Map;
 public interface Algorithm {
     void calcNextStep();
     List<Cell> getCurrentCells();
+    void solve();
 }

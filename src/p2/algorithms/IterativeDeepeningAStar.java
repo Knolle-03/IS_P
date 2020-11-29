@@ -70,4 +70,11 @@ public class IterativeDeepeningAStar implements Algorithm {
     public List<Cell> getCurrentCells() {
         return null;
     }
+
+    @Override
+    public void solve() {
+        while (!maze.isSolved()) {
+            calcNextStep();
+        }
+    }
 }

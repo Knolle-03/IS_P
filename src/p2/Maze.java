@@ -4,26 +4,88 @@ import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static processing.core.PApplet.floor;
 
 public class Maze {
+
+  //generation fields
+  Stack<Cell> visitedCells = new Stack<>();
+  int additionalWallRemoves;
+  boolean generationCompleted = false;
+
+
   PApplet sketch;
   int rows;
   int cols;
   boolean solved = false;
   List<Cell> cells = new ArrayList<>();
+  Cell current;
+  Cell start;
+  Cell target;
 
 
-  public Maze(PApplet sketch, float width, float height, int squareSize) {
+  public Maze(PApplet sketch, float width, float height, int squareSize, int additionalWallRemoves) {
     this.sketch = sketch;
     cols = floor(width / squareSize);
     rows = floor(height / squareSize);
+    this.additionalWallRemoves = additionalWallRemoves;
 
     for (int j = 0; j < rows; j++) {
       for (int i = 0; i < cols; i++) {
         cells.add(new Cell(sketch, i, j, squareSize));
       }
+    }
+    //STEP 1
+    current = cells.get(0);
+    current.visited = true;
+    start = cells.get(0);
+    target = cells.get(cells.size() - 1);
+  }
+
+  public void generate(){
+    while (!generationCompleted) {
+      nextStep();
+    }
+  }
+
+
+
+  public void nextStep() {
+    if (!generationCompleted) {
+      current.isCurrent = false;
+
+
+      List<Cell> neighbours = getNeighbours(current);
+      Cell next = null;
+      if (neighbours.size() > 0) next = neighbours.get(ThreadLocalRandom.current().nextInt(neighbours.size()));
+
+      //STEP 2.1.1
+      if (next != null) {
+        // STEP 2.1.2
+        visitedCells.push(current);
+        // STEP 2.1.3
+        removeWall(current, next);
+        // STEP 2.1.4
+        current = next;
+        current.visited = true;
+        // STEP 2.2.0
+      } else if (!visitedCells.empty()) {
+        // 2.2.1 + 2.2.2
+        current = visitedCells.pop();
+
+      } else {
+
+        for (int i = 0; i < additionalWallRemoves; i++) {
+          int cellIndex = ThreadLocalRandom.current().nextInt(cells.size());
+          removeRandomWall(getCells().get(cellIndex));
+        }
+        generationCompleted = true;
+
+      }
+      current.isCurrent = true;
     }
   }
 
@@ -70,7 +132,7 @@ public class Maze {
           if (neighbourIndex != -1) {
             cell.walls[0] = false;
             cells.get(neighbourIndex).walls[2] = false;
-            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            //System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
             return;
           }
         } else if (i == 1) {
@@ -79,7 +141,7 @@ public class Maze {
           if (neighbourIndex != -1) {
             cell.walls[1] = false;
             cells.get(neighbourIndex).walls[3] = false;
-            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            //System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
             return;
           }
         }else if (i == 2) {
@@ -88,7 +150,7 @@ public class Maze {
           if (neighbourIndex != -1) {
             cell.walls[2] = false;
             cells.get(neighbourIndex).walls[0] = false;
-            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            //System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
             return;
           }
         }else if (i == 3) {
@@ -97,7 +159,7 @@ public class Maze {
           if (neighbourIndex != -1) {
             cell.walls[3] = false;
             cells.get(neighbourIndex).walls[1] = false;
-            System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
+            //System.out.println("Removed wall between: " + cell.get2dIndex() + " and " + cells.get(neighbourIndex).get2dIndex());
             return;
           }
         }
@@ -125,6 +187,14 @@ public class Maze {
     }
   }
 
+
+  public PApplet getSketch() {
+    return sketch;
+  }
+
+  public void setSketch(PApplet sketch) {
+    this.sketch = sketch;
+  }
 
   public boolean isSolved() {
     return solved;
