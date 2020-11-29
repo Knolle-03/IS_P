@@ -14,7 +14,7 @@ public class MazeSolverSketch extends PApplet {
     int SOLVE_FPS = 120;
 
     // map to choose an algorithm by id
-    Map<Integer, String> algorithms = ofEntries(
+    Map<Integer, String> algorithms = Map.ofEntries(
             entry(0, "BFS"),
             entry(1, "GBFS"),
             entry(2, "A*"),
