@@ -25,11 +25,30 @@ public class Cell {
   int col;
   int row;
   int size;
+
+
   public Cell(PApplet sketch, int col, int row, int size) {
     this.sketch = sketch;
     this.col = col;
     this.row = row;
     this.size = size;
+  }
+
+  // copy constructor
+  public Cell(Cell cell) {
+    this.sketch = cell.sketch;
+    this.walls = Arrays.copyOf(cell.walls, cell.walls.length);
+    this.visited = cell.visited;
+    this.isExplored = cell.isExplored;
+    this.inClosedList = cell.inClosedList;
+    this.inOpenList = cell.inOpenList;
+    this.isCurrent = cell.isCurrent;
+    this.isPartOfPath = cell.isPartOfPath;
+    this.manhattanDistance = cell.manhattanDistance;
+    this.costOfReach = cell.costOfReach;
+    this.col = cell.col;
+    this.row = cell.row;
+    this.size = cell.size;
   }
 
   public void show() {
@@ -145,6 +164,15 @@ public class Cell {
   }
 
   //############# Getters and Setters ###################
+
+
+  public PApplet getSketch() {
+    return sketch;
+  }
+
+  public void setSketch(PApplet sketch) {
+    this.sketch = sketch;
+  }
 
   public int getEstimatedTotalCost() { return getCostOfReach() + getManhattanDistance(); }
 

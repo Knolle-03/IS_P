@@ -21,6 +21,7 @@ public class IterativeDeepeningAStar implements Algorithm {
     int bound;
     int result;
     int FOUND = -42;
+    int calcNextStepCalls = 0;
     Stack<Cell> path = new Stack<>();
 
 
@@ -39,6 +40,7 @@ public class IterativeDeepeningAStar implements Algorithm {
 
     @Override
     public void calcNextStep() {
+
         result = search(path, 0, bound);
         if (result == FOUND) {
             for (Cell cell : path) cell.setPartOfPath(true);
@@ -49,6 +51,7 @@ public class IterativeDeepeningAStar implements Algorithm {
     }
 
     public int search(Stack<Cell> path, int g, int bound) {
+        calcNextStepCalls++;
         current = path.get(path.size() - 1);
         int f = current.getEstimatedTotalCost();
         if (f > bound) return f;
@@ -76,5 +79,23 @@ public class IterativeDeepeningAStar implements Algorithm {
         while (!maze.isSolved()) {
             calcNextStep();
         }
+    }
+
+    @Override
+    public Maze getMaze() {
+        return maze;
+    }
+
+    public String getName() {
+        return "Iterative Deepening A*";
+    }
+
+    public String getInfo() {
+        return getName() + "\n\n" +
+                "Total cell count: " + maze.getCells().size() + "\n" +
+                "calcNextStep calls: " + calcNextStepCalls + "\n" +
+                "Open List Size: " + openList.size() + "\n" +
+                "Closed List Size: " + closedList.size() + "\n" +
+                "Found Path length: " + path.size();
     }
 }

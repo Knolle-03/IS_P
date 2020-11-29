@@ -10,4 +10,7 @@ public interface Algorithm {
     void calcNextStep();
     List<Cell> getCurrentCells();
     void solve();
+    Maze getMaze();
+    String getName();
+    String getInfo();
 }

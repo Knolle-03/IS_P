@@ -17,28 +17,34 @@ public class MazeSolverSketch extends PApplet {
     int SOLVE_FPS = 20;
 
     // map to choose an algorithm by id
-    Map<Integer, String> algorithms = Map.ofEntries(
+    Map<Integer, String> algorithmsMap = Map.ofEntries(
             entry(0, "BFS"),
             entry(1, "GBFS"),
             entry(2, "A*"),
             entry(3, "DFS"),
-            entry(4, "IDA*"),
-            entry(5, "IDS"));
-
-    // name of selected algorithm
-    String ALGORITHM_NAME = algorithms.get(1);
+            entry(4, "IDA*"));
     // size of each cell in pixels
     int squareSize = 50;
+    // name of selected algorithm
+    String ALGORITHM_NAME = algorithmsMap.get(1);
     // width of window
-    int WIDTH = 3400;
+    int WIDTH = 1800;
     // height of window
-    int HEIGHT = 1200;
+    int HEIGHT = 1000;
+
+    int textWindowWidth = WIDTH / 5;
+
+
+
+
     // display as fullscreen window
     boolean fullscreen = false;
 
-    Maze maze;
+    Maze originalMaze;
+    List<Algorithm> algorithms = new ArrayList<>();
+    Algorithm currentAlgorithm;
     boolean drawGeneration = false;
-    boolean drawAlgorithm = true;
+    boolean drawAlgorithm = false;
     boolean init = false;
     Cell target;
 
@@ -55,21 +61,29 @@ public class MazeSolverSketch extends PApplet {
     public void setup() {
         frameRate(GENERATION_FPS);
 
-        // calc additional wall to remove (last float equals percentage i.e. 0.1 = 10%)
+        // calc additional wall to remove (last float equals percentage i.e. 0.1f = 10%)
         int additionalWallRemoves = floor(width / (float) squareSize * height / (float) squareSize * 0.1f);
         // init new maze
-        maze = new Maze(this, width, height, squareSize, additionalWallRemoves);
+        originalMaze = new Maze(this, width - textWindowWidth, height, squareSize, additionalWallRemoves);
         // set target cell
-        target = maze.cells.get(maze.cells.size() - 1);
+        target = originalMaze.cells.get(originalMaze.cells.size() - 1);
         // set algorithm to solve the maze
-        algorithm = AlgorithmFactory.getAlgorithm(ALGORITHM_NAME, maze);
         // generate whole maze in setup if it should not be drawn
         if (!drawGeneration) {
-            maze.generate();
+            originalMaze.generate();
+            // calc manhattan distance of each cell
+            for (Cell cell : originalMaze.cells) {
+                cell.calcManhattanDistance(target);
+            }
         }
         // solve whole maze in setup if it should not be drawn
         if (!drawAlgorithm) {
-            algorithm.solve();
+            for (int i = 0; i < algorithmsMap.size(); i++) {
+                Algorithm algorithm = AlgorithmFactory.getAlgorithm(algorithmsMap.get(i), originalMaze.duplicate());
+                algorithm.solve();
+                algorithms.add(algorithm);
+            }
+            init();
         }
 
     }
@@ -79,42 +93,34 @@ public class MazeSolverSketch extends PApplet {
         background(background_color);
 
         // if maze is not fully generated
-        if (drawGeneration && !maze.generationCompleted ){
+        if (drawGeneration && !originalMaze.generationCompleted ){
             // generate next cell
-            maze.nextStep();
+            originalMaze.nextStep();
 
             // if generation should be drawn
             if (drawGeneration) {
                 // draw each cell
-                for (Cell cell : maze.cells) {
+                for (Cell cell : originalMaze.cells) {
                     cell.show();
                 }
             }
         }
 
         // if maze generation is done (do once)
-        if (maze.generationCompleted && !init) {
-            init = true;
-            // calc manhattan distance of each cell
-            for (Cell cell : maze.cells) {
-                cell.calcManhattanDistance(target);
-            }
-            frameRate(SOLVE_FPS);
-            System.out.println("Generation done.");
-            // stop draw loop in starting position.
-
+        if (originalMaze.generationCompleted && !init) {
+            init();
         }
 
         // while maze is being solved
-        if (drawAlgorithm && maze.generationCompleted && !maze.solved) {
-
+        if (drawAlgorithm && originalMaze.generationCompleted && !currentAlgorithm.getMaze().isSolved()) {
+            drawInfo();
             // calc next step
-            algorithm.calcNextStep();
+            currentAlgorithm.calcNextStep();
 
             // if solving should be drawn
             if (drawAlgorithm) {
                 //draw  each cell
-                for (Cell cell : maze.cells) {
+                for (Cell cell : currentAlgorithm.getMaze().cells) {
                     cell.show();
                 }
             }
@@ -122,13 +128,63 @@ public class MazeSolverSketch extends PApplet {
         }
 
         // when maze is solved
-        if (maze.generationCompleted && maze.solved) {
-            for (Cell cell : maze.cells) {
+        if (originalMaze.generationCompleted && currentAlgorithm.getMaze().isSolved()) {
+            drawInfo();
+            for (Cell cell : currentAlgorithm.getMaze().cells) {
                 cell.show();
             }
         }
 
     }
+
+    private void init() {
+        init = true;
+
+        if (drawAlgorithm) {
+            frameRate(SOLVE_FPS);
+            for (int i = 0; i < algorithmsMap.size(); i++) {
+                algorithms.add(AlgorithmFactory.getAlgorithm(algorithmsMap.get(i), originalMaze.duplicate()));
+            }
+        }
+        currentAlgorithm = algorithms.get(0);
+        System.out.println("Generation done.");
+        // stop draw loop in starting position.
+        noLoop();
+    }
+
+    @Override
+    public void keyPressed() {
+        System.out.println(key);
+
+        if (key == '0') {
+            currentAlgorithm = algorithms.get(0);
+            redraw();
+        } else if ( key == '1') {
+            currentAlgorithm = algorithms.get(1);
+            redraw();
+        } else if ( key == '2') {
+            currentAlgorithm = algorithms.get(2);
+            redraw();
+        } else if ( key == '3') {
+            currentAlgorithm = algorithms.get(3);
+            redraw();
+        } else if ( key == '4') {
+            currentAlgorithm = algorithms.get(4);
+            redraw();
+        }
+    }
+
+
+    public void drawInfo() {
+        textAlign(LEFT);
+        noStroke();
+        fill(255);
+        textSize(20);
+        text(currentAlgorithm.getInfo(), width - textWindowWidth  + 10, 100);
+        textSize(16);
+    }
+
+
 
 
 

@@ -45,6 +45,28 @@ public class Maze {
     target = cells.get(cells.size() - 1);
   }
 
+  private Maze(Maze maze) {
+    // It is assumed that the Maze is not copied during generation.
+    this.visitedCells = new Stack<>();
+
+    this.additionalWallRemoves = maze.additionalWallRemoves;
+    this.generationCompleted = maze.generationCompleted;
+    this.sketch = maze.sketch;
+    this.rows = maze.rows;
+    this.cols = maze.cols;
+    this.solved = maze.solved;
+    for(Cell cell : maze.cells) {
+      this.cells.add(new Cell(cell));
+    }
+    this.current = maze.current;
+    this.start = maze.start;
+    this.target = maze.target;
+  }
+
+  public Maze duplicate() {
+    return new Maze(this);
+  }
+
   public void generate(){
     while (!generationCompleted) {
       nextStep();

@@ -16,6 +16,8 @@ public class GreedyBestFirstSearch implements Algorithm {
     Cell target;
     Map<Cell, Cell> nextToPrevMap = new HashMap<>();
     Cell minCostCell;
+    int pathLength;
+    int calcNextStepCalls = 0;
 
     public GreedyBestFirstSearch(Maze maze) {
         this.maze = maze;
@@ -32,6 +34,7 @@ public class GreedyBestFirstSearch implements Algorithm {
 
     @Override
     public void calcNextStep() {
+        calcNextStepCalls++;
         minCostCell.setCurrent(false);
         // STEP 1
         openList.sort(Comparator.comparingInt(Cell::getManhattanDistance));
@@ -56,9 +59,11 @@ public class GreedyBestFirstSearch implements Algorithm {
 //            System.out.println("MAP: " + nextToPrevMap.toString());
             System.out.println("MAZE SOLVED!!!");
             Cell curr = target;
+            pathLength = 1;
             while (curr != start) {
                 System.out.print(curr.get2dIndex() + " <== ");
                 curr.setPartOfPath(true);
+                pathLength++;
                 curr = nextToPrevMap.get(curr);
             }
             curr.setPartOfPath(true);
@@ -99,6 +104,31 @@ public class GreedyBestFirstSearch implements Algorithm {
         while (!maze.isSolved()) {
             calcNextStep();
         }
+    }
+
+    @Override
+    public Maze getMaze() {
+        return maze;
+    }
+
+    public String getName() {
+        return "Greedy Best First Search";
+    }
+
+    public int getPathLength() {
+        if (maze.isSolved()) {
+            return pathLength;
+        }
+        return -1;
+    }
+
+    public String getInfo() {
+        return getName() + "\n\n" +
+                "Total cell count: " + maze.getCells().size() + "\n" +
+                "calcNextStep calls: " + calcNextStepCalls + "\n" +
+                "Open List Size: " + openList.size() + "\n" +
+                "Closed List Size: " + closedList.size() + "\n" +
+                "Found Path length: " + pathLength;
     }
 
 

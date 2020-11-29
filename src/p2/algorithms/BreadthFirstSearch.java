@@ -8,11 +8,12 @@ import java.util.*;
 public class BreadthFirstSearch implements Algorithm{
 
     Maze maze;
-    List<Cell> openList = new ArrayList<>();
-    List<Cell> closedList = new ArrayList<>();
+    Set<Cell> openList = new HashSet<>();
+    Set<Cell> closedList = new HashSet<>();
     Cell current;
     Cell start;
     Cell target;
+    int calcNextStepCalls = 0;
     Map<Cell, Cell> nextToPrevMap = new HashMap<>();
 
     public BreadthFirstSearch(Maze maze) {
@@ -28,6 +29,7 @@ public class BreadthFirstSearch implements Algorithm{
 
     @Override
     public void calcNextStep() {
+        calcNextStepCalls++;
         for (Cell cell : openList) {
             System.out.println("open list: " + cell.get2dIndex());
         }
@@ -35,7 +37,7 @@ public class BreadthFirstSearch implements Algorithm{
             System.out.println("closed list: " + cell.get2dIndex());
             cell.setCurrent(false);
         }
-        List<Cell> newOpenList = new ArrayList<>();
+        Set<Cell> newOpenList = new HashSet<>();
         for (Cell cellOfOpenList : openList) {
             if (cellOfOpenList == target) {
                 cellOfOpenList.setInOpenList(false);
@@ -92,5 +94,35 @@ public class BreadthFirstSearch implements Algorithm{
         while (!maze.isSolved()) {
             calcNextStep();
         }
+    }
+
+    @Override
+    public Maze getMaze() {
+        return maze;
+    }
+
+    @Override
+    public String toString() {
+        return "BreadthFirstSearch{" + "\n" +
+                "maze=" + maze + "\n" +
+                ", openList=" + openList + "\n" +
+                ", closedList=" + closedList + "\n" +
+                ", current=" + current + "\n" +
+                ", start=" + start + "\n" +
+                ", target=" + target + "\n" +
+                ", nextToPrevMap=" + nextToPrevMap + "\n" +
+                '}';
+    }
+
+    public String getName() {
+        return "Breadth First Search";
+    }
+
+    public String getInfo() {
+        return getName() + "\n\n" +
+                "Total cell count: " + maze.getCells().size() + "\n" +
+                "calcNextStep calls: " + calcNextStepCalls + "\n" +
+                "Open List Size: " + openList.size() + "\n" +
+                "Closed List Size: " + closedList.size() + "\n";
     }
 }

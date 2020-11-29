@@ -16,6 +16,7 @@ public class DepthFirstSearch implements Algorithm {
     Cell lastCurrent;
     Cell start;
     Cell target;
+    int calcNextStepCalls = 0;
 
     public DepthFirstSearch(Maze maze) {
         this.maze = maze;
@@ -31,6 +32,7 @@ public class DepthFirstSearch implements Algorithm {
 
     @Override
     public void calcNextStep() {
+        calcNextStepCalls++;
         if (current == target) {
             maze.setSolved(true);
             lastCurrent.setCurrent(false);
@@ -83,5 +85,22 @@ public class DepthFirstSearch implements Algorithm {
         while (!maze.isSolved()) {
             calcNextStep();
         }
+    }
+
+    @Override
+    public Maze getMaze() {
+        return maze;
+    }
+
+    public String getName() {
+        return "Depth First Search";
+    }
+
+    public String getInfo() {
+        return getName() + "\n\n" +
+                "Total cell count: " + maze.getCells().size() + "\n" +
+                "calcNextStep calls: " + calcNextStepCalls + "\n" +
+                "Open List Size: " + openList.size() + "\n" +
+                "Closed List Size: " + closedList.size() + "\n";
     }
 }
