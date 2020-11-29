@@ -24,7 +24,7 @@ public class MazeSolverSketch extends PApplet {
 
     String ALGORITHM_NAME = algorithms.get(4);
     int background_color = color (50);
-    int squareSize = 50;
+    int squareSize = 25;
     int WIDTH = 3400;
     int HEIGHT = 1300;
     Maze maze;
