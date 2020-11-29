@@ -81,21 +81,21 @@ public class Cell {
       sketch.stroke(0, 255);
       sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
       //sketch.textSize();
-      sketch.text(manhattanDistance, x + 3 * (size / 4f), y + size / 4f);
+      sketch.text(manhattanDistance, x + 3 * (size / 4f), y + 1.5f * size / 4f);
     }
 
     if (costOfReach != -1) {
       sketch.stroke(0, 255);
       sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
       //sketch.textSize();
-      sketch.text(costOfReach, x + size / 4f, y + size / 4f);
+      sketch.text(costOfReach, x + size / 4f, y + 1.5f * size / 4f);
     }
 
     if (costOfReach != -1) {
       sketch.stroke(0, 255);
       sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
       //sketch.textSize();
-      sketch.text(getEstimatedTotalCost(), x + size / 2f, y + size / 2f);
+      sketch.text(getEstimatedTotalCost(), x + size / 2f, y + 1.5f *size / 2f);
     }
 
     if (isCurrent) {
@@ -123,7 +123,7 @@ public class Cell {
       sketch.noStroke();
       sketch.fill(0, 255, 0, 255);
       sketch.rectMode(PConstants.CENTER);
-      sketch.rect(x + size / 2f, y + 3* (size / 4f), size - 4 * (size / 5f), size - 4 * (size / 5f));
+      sketch.rect(x + size / 2f, y + (size / 4f), size - 4 * (size / 5f), size - 4 * (size / 5f));
     }
 
   }

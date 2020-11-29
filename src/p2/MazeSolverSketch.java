@@ -22,15 +22,16 @@ public class MazeSolverSketch extends PApplet {
             entry(1, "GBFS"),
             entry(2, "A*"),
             entry(3, "DFS"),
-            entry(4, "IDA*"));
+            entry(4, "IDDFS"),
+            entry(5, "IDA*"));
     // size of each cell in pixels
     int squareSize = 50;
     // name of selected algorithm
     String ALGORITHM_NAME = algorithmsMap.get(1);
     // width of window
-    int WIDTH = 1800;
+    int WIDTH = 1600;
     // height of window
-    int HEIGHT = 1000;
+    int HEIGHT = 900;
 
     int textWindowWidth = WIDTH / 5;
 
@@ -44,11 +45,10 @@ public class MazeSolverSketch extends PApplet {
     List<Algorithm> algorithms = new ArrayList<>();
     Algorithm currentAlgorithm;
     boolean drawGeneration = false;
-    boolean drawAlgorithm = false;
+    boolean drawAlgorithm = true;
     boolean init = false;
     Cell target;
 
-    Algorithm algorithm;
 
 
 
@@ -68,7 +68,7 @@ public class MazeSolverSketch extends PApplet {
         // set target cell
         target = originalMaze.cells.get(originalMaze.cells.size() - 1);
         // set algorithm to solve the maze
-        // generate whole maze in setup if it should not be drawn
+        // generate maze in setup if it should not be drawn
         if (!drawGeneration) {
             originalMaze.generate();
             // calc manhattan distance of each cell
@@ -76,7 +76,7 @@ public class MazeSolverSketch extends PApplet {
                 cell.calcManhattanDistance(target);
             }
         }
-        // solve whole maze in setup if it should not be drawn
+        // solve maze in setup if it should not be drawn
         if (!drawAlgorithm) {
             for (int i = 0; i < algorithmsMap.size(); i++) {
                 Algorithm algorithm = AlgorithmFactory.getAlgorithm(algorithmsMap.get(i), originalMaze.duplicate());
@@ -170,6 +170,9 @@ public class MazeSolverSketch extends PApplet {
             redraw();
         } else if ( key == '4') {
             currentAlgorithm = algorithms.get(4);
+            redraw();
+        } else if ( key == '5') {
+            currentAlgorithm = algorithms.get(5);
             redraw();
         }
     }

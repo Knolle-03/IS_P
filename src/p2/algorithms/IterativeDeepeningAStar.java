@@ -4,6 +4,7 @@ import p2.Cell;
 import p2.Maze;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,7 +19,7 @@ public class IterativeDeepeningAStar implements Algorithm {
     Cell current;
     Cell start;
     Cell target;
-    int bound;
+    int bound = 1;
     int result;
     int FOUND = -42;
     int calcNextStepCalls = 0;
@@ -34,12 +35,43 @@ public class IterativeDeepeningAStar implements Algorithm {
         maxDepthBound = start.getEstimatedTotalCost() * 10;
         current = start;
         path.push(start);
-
+        openList.addAll(maze.getReachableNeighbours(start));
     }
 
 
     @Override
     public void calcNextStep() {
+
+//        for (Cell cell : openList) {
+//            if (cell.getCostOfReach() <= bound) {
+//                List<Cell> neighbours = maze.getReachableNeighbours(cell);
+//                for (Cell neighbour : neighbours) {
+//                    if (neighbour == target) maze.setSolved(true);
+//                    if (!openList.contains(neighbour)) openList.add(neighbour);
+//
+//                }
+//            }
+//        }
+//        openList.sort(Comparator.comparingInt(Cell::getCostOfReach));
+//
+//        bound = openList.get(0).getCostOfReach();
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         result = search(path, 0, bound);
         if (result == FOUND) {

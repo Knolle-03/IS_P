@@ -10,6 +10,7 @@ public class AlgorithmFactory {
         else if (name.equals("GBFS")) return new GreedyBestFirstSearch(maze);
         else if (name.equals("DFS")) return new DepthFirstSearch(maze);
         else if (name.equals("IDA*")) return new IterativeDeepeningAStar(maze);
+        else if (name.equals("IDDFS")) return new IterativeDeepeningDepthFirstSearch(maze);
         else if (name.equals("A*")) return new AStar(maze);
 
         return null;
