@@ -4,7 +4,6 @@ import p2.Cell;
 import p2.Maze;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class IterativeDeepeningDepthFirstSearch implements Algorithm {
 

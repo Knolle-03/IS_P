@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RubiksCube {
+public class Cube {
     PApplet sketch;
     int dim = 3;
 
@@ -16,7 +16,7 @@ public class RubiksCube {
     Cubie[][][] cube = new Cubie[dim][dim][dim];
 
 
-    public RubiksCube(PApplet sketch, int dim) {
+    public Cube(PApplet sketch, int dim) {
         this.sketch = sketch;
         //colorList.add();
         this.dim = dim;

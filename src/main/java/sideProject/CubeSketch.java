@@ -6,9 +6,9 @@ import peasy.PeasyCam;
 import processing.core.PApplet;
 
 
-public class RubiksCubeSketch extends PApplet {
+public class CubeSketch extends PApplet {
     int dim = 3;
-    RubiksCube cube;
+    Cube cube;
     PeasyCam cam;
 
     public void settings() {
@@ -16,7 +16,7 @@ public class RubiksCubeSketch extends PApplet {
     }
 
     public void setup() {
-        cube = new RubiksCube(this, dim);
+        cube = new Cube(this, dim);
         cam = new PeasyCam(this, 500);
 
     }
@@ -29,8 +29,8 @@ public class RubiksCubeSketch extends PApplet {
 
     public static void main(String[] args){
         String[] processingArgs = {"MySketch"};
-        RubiksCubeSketch rubiksCubeSketch = new RubiksCubeSketch();
-        PApplet.runSketch(processingArgs, rubiksCubeSketch);
+        CubeSketch cubeSketch = new CubeSketch();
+        PApplet.runSketch(processingArgs, cubeSketch);
     }
 
 }

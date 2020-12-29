@@ -3,7 +3,6 @@ package p2.algorithms;
 import p2.Cell;
 import p2.Maze;
 import processing.core.PApplet;
-import processing.core.PConstants;
 
 import java.util.*;
 
