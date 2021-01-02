@@ -28,10 +28,12 @@ public class NeuronalNetwork {
 
     public float[] feedForward(float[] input) {
         Matrix inputMatrix = new Matrix(input);
-        Matrix outputHidden = input_hidden_weights.matrixProduct(inputMatrix);
+        Matrix input_hidden_weights2 = input_hidden_weights.transpose();
+        Matrix outputHidden = input_hidden_weights2.matrixProduct(inputMatrix);
         outputHidden.matrixAddProduct(this.bias_hidden);
         outputHidden.sigmoid();
-        Matrix outputOutput = input_hidden_weights.matrixProduct(outputHidden);
+        Matrix hidden_output_weights2 = hidden_output_weights.transpose();
+        Matrix outputOutput = hidden_output_weights2.matrixProduct(outputHidden);
         outputOutput.matrixAddProduct(this.bias_output);
         outputOutput.sigmoid();
         return outputOutput.toArray();
