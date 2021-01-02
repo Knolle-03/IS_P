@@ -48,7 +48,7 @@ public class Matrix {
 
     public void fillWithRandomValues() {
         Random random = new Random();
-        float rangeMin = -1.0f;
+        float rangeMin = 0f;
         float rangeMax = 1.0f;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
