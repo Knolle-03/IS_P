@@ -16,5 +16,6 @@
     <orderEntry type="library" name="jogl-all" level="project" />
     <orderEntry type="library" name="peasy" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.16" level="project" />
+    <orderEntry type="library" name="Maven: org.ojalgo:ojalgo:48.4.0" level="project" />
   </component>
 </module>
