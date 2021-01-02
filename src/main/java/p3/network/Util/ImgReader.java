@@ -1,5 +1,7 @@
 package p3.network.Util;
 
+import processing.core.PImage;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,4 +28,5 @@ public class ImgReader {
         }
         return colors;
     }
+
 }
