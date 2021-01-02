@@ -21,7 +21,7 @@ public class NeuronalNetwork {
         this.hidden = hidden;
         this.hidden_output_weights = new Matrix(hidden, output);
         this.hidden_output_weights.fillWithRandomValues();
-        this.bias_output = new Matrix(hidden, 1);
+        this.bias_output = new Matrix(output, 1);
         this.bias_output.fillWithRandomValues();
         this.output = output;
     }
