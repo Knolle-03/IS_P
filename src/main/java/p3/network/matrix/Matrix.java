@@ -36,9 +36,6 @@ public class Matrix {
     }
 
     public static Matrix subtract(Matrix a, Matrix b) {
-//        b.scalarMultiplyProduct(-1);
-//        a.matrixAddProduct(b);
-//        return a;
         Matrix result = new Matrix(a.rows, a.cols);
         for (int row = 0; row < a.rows; row++) {
             for (int col = 0; col < a.cols; col++) {
@@ -74,13 +71,11 @@ public class Matrix {
 
     public static Matrix transpose(Matrix matrix) {
         Matrix newMatrix = new Matrix(matrix.cols, matrix.rows);
-        float[][] newData = new float[matrix.cols][matrix.rows];
         for (int row = 0; row < matrix.rows; row++) {
             for (int col = 0; col < matrix.cols; col++) {
-                newData[col][row] = matrix.data[row][col];
+                newMatrix.data[col][row] = matrix.data[row][col];
             }
         }
-        newMatrix.setData(newData);
         return newMatrix;
     }
 
@@ -129,20 +124,32 @@ public class Matrix {
         return result;
     }
 
-    public void matrixMultiplyElementProduct(Matrix matrix) {
+    public Matrix matrixMultiplyElementProduct(Matrix matrix) {
+        Matrix result = new Matrix(matrix.rows, matrix.cols);
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                data[row][col] = data[row][col] * matrix.data[row][col];
+                result.data[row][col] = data[row][col] * matrix.data[row][col];
             }
         }
+        return result;
+    }
+
+    public static Matrix matrixMultiplyElementProduct(Matrix a, Matrix b) {
+        Matrix result = new Matrix(a.rows, a.cols);
+        for (int row = 0; row < a.rows; row++) {
+            for (int col = 0; col < a.cols; col++) {
+                result.data[row][col] = a.data[row][col] * b.data[row][col];
+            }
+        }
+
+        return result;
     }
 
     public void matrixAddProduct(Matrix matrix) {
-        System.out.println("Rows: " + rows + " Cols: " + cols);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 data[row][col] = data[row][col] + matrix.data[row][col];
-                System.out.println(data[row][col]);
 
             }
         }
