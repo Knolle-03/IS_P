@@ -2,6 +2,9 @@ package p3.network;
 
 import p3.network.Util.ImgReader;
 import p3.network.Util.NeuronalNetwork;
+import p3.network.mnist.util.CsvFileReader;
+import p3.network.mnist.util.TestData;
+import p3.network.mnist.util.TrainingData;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -14,6 +17,16 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Main extends PApplet {
+
+    CsvFileReader trainingSet = new CsvFileReader("src/main/java/p3/network/mnist/data/mnist_train.csv", false);
+    CsvFileReader testSet = new CsvFileReader("src/main/java/p3/network/mnist/data/mnist_test.csv", true);
+
+    List<TrainingData> trainingData;
+    List<TestData> testData;
+
+    List<Float[][]> testNumbers;
+
+
     int background_color = color (0);
     int WIDTH = 500;
     int HEIGHT = 500;
@@ -33,7 +46,18 @@ public class Main extends PApplet {
             percentages[i] = 0;
         }
         neuronalNetwork = new NeuronalNetwork(784, 784, 10);
-        frameRate(5);
+//
+//        trainingSet.readData();
+//        testSet.readData();
+//        trainingData = trainingSet.getTrainingData();
+//        testData = testSet.getTestData();
+//        testNumbers = testSet.getNumbers();
+//        neuronalNetwork = new NeuronalNetwork(784, 256, 10);
+//
+//
+
+
+        frameRate(50);
         background(background_color);
     }
 
@@ -105,10 +129,10 @@ public class Main extends PApplet {
             fill(0);
             rect(400,0,500,250);
             float[] floats280 = new float[280*280];
-            for (int x = 0; x < 280; x++) {
-                for (int y = 0; y < 280; y++) {
+            for (int y = 0; y < 280; y++) {
+                for (int x = 0; x < 280; x++) {
                     Color color = new Color(get(x, y));
-                    floats280[x + y] = color.getRed() + color.getGreen() + color.getBlue();
+                    floats280[x + y] = .299f * color.getRed() + 0.587f * color.getGreen() + 0.114f * color.getBlue();
                 }
             }
             float[] floats = new float[28*28];
@@ -120,9 +144,23 @@ public class Main extends PApplet {
                 if (val == 0) {
                     floats[i] = 0;
                 } else {
-                    floats[i] = (val) / (3 * 255);
+                    floats[i] = (val) / 255;
                 }
             }
+
+
+            float res = 10;
+            float cols = width / res;
+            float rows = height / res;
+            for (int col = 300; col < 328; col++) {
+                for (int row = 0; row < 28; row++) {
+                    noStroke();
+                    fill(floats[col + row] * 255);
+                    rect(col * res, row * res, res, res);
+                }
+            }
+
+
             System.out.println(Arrays.toString(floats));
             float[] retVal = neuronalNetwork.feedForward(floats);
             for (int i = 0; i < retVal.length; i++) {
@@ -133,6 +171,11 @@ public class Main extends PApplet {
         redraw();
     }
     private void train() {
+        for (int i = 0; i < 10000 ; i++) {
+            if (i % 1000 == 0) System.out.println(i);
+            int pick = ThreadLocalRandom.current().nextInt(0, trainingData.size());
+            neuronalNetwork.backPropagation(trainingData.get(pick).getInputs(), trainingData.get(pick).getTargets());
 
+        }
     }
 }

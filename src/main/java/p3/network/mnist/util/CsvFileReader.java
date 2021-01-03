@@ -1,7 +1,5 @@
 package p3.network.mnist.util;
 
-import p3.network.TrainingData;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

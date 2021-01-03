@@ -1,6 +1,6 @@
 package p3.network.Util;
 
-import p3.network.TrainingData;
+import p3.network.mnist.util.TrainingData;
 import processing.core.PApplet;
 
 import java.util.List;
