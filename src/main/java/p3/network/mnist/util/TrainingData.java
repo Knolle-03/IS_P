@@ -1,4 +1,4 @@
-package p3.network;
+package p3.network.mnist.util;
 
 import java.util.Arrays;
 

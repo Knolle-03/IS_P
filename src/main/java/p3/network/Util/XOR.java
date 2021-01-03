@@ -1,11 +1,8 @@
 package p3.network.Util;
 
-import lombok.var;
-import p2.MazeSolverSketch;
 import p3.network.TrainingData;
 import processing.core.PApplet;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,7 +32,7 @@ public class XOR extends PApplet {
 
         for (int i = 0; i < 1000 ; i++) {
             int pick = ThreadLocalRandom.current().nextInt(0, trainingData.size());
-            neuronalNetwork.train(trainingData.get(pick).getInputs(), trainingData.get(pick).getTargets());
+            neuronalNetwork.backPropagation(trainingData.get(pick).getInputs(), trainingData.get(pick).getTargets());
         }
 
 
@@ -45,8 +42,8 @@ public class XOR extends PApplet {
         float cols = width / res;
         float rows = height / res;
 
-        for (float i = 0; i < cols; i++) {
-            for (float j = 0; j < rows; j++) {
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
                 float x1 = i / cols;
                 float x2 = j / rows;
                 float[] inputs = {x1, x2};

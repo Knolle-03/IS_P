@@ -39,7 +39,7 @@ public class Test {
 
         for (int i = 0; i < 250000; i++) {
             int rnd = ThreadLocalRandom.current().nextInt(0, trainingData.size());
-            neuronalNetwork.train(trainingData.get(rnd).inputs, trainingData.get(rnd).targets);
+            neuronalNetwork.backPropagation(trainingData.get(rnd).inputs, trainingData.get(rnd).targets);
         }
 
         System.out.println(Arrays.toString(neuronalNetwork.feedForward(stateOne)));

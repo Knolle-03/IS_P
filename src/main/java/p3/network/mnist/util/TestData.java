@@ -1,14 +1,14 @@
-package p3.network;
+package p3.network.mnist.util;
 
 import java.util.Arrays;
 
-public class TrainingData {
+public class TestData {
 
     float[] inputs;
     float[] targets;
 
 
-    public TrainingData(float[] inputs, float[] targets) {
+    public TestData(float[] inputs, float[] targets) {
         this.inputs = inputs;
         this.targets = targets;
     }

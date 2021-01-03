@@ -1,2 +1,3 @@
 # Project exclude paths
 /out/
+/src/main/java/p3/network/mnist/data/

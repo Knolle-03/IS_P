@@ -46,7 +46,7 @@ public class NeuronalNetwork {
         return output.toArray();
     }
 
-    public void train(float[] inputsArr, float[] targetsArr) {
+    public void backPropagation(float[] inputsArr, float[] targetsArr) {
 
         Matrix inputs = new Matrix(inputsArr);
         Matrix hidden = inputHiddenWeights.matrixProduct(inputs);

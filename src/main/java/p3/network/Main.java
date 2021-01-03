@@ -50,9 +50,7 @@ public class Main extends PApplet {
         img8 = loadImage("8.jpg");
         img9 = loadImage("9.jpg");
         percentages = new int[10];
-        for (int i = 0; i < percentages.length; i++) {
-            percentages[i] = 0;
-        }
+        Arrays.fill(percentages, 0);
         neuronalNetwork = new NeuronalNetwork(1024, 1024, 10);
         frameRate(5);
         background(background_color);
@@ -226,7 +224,6 @@ public class Main extends PApplet {
 
         for (int i = 0; i < 1000; i++) {
             int rnd = ThreadLocalRandom.current().nextInt(0, trainingData.size());
-            neuronalNetwork.train(trainingData.get(rnd).inputs, trainingData.get(rnd).targets);
         }
     }
 }
