@@ -42,19 +42,16 @@ public class Main extends PApplet {
     @Override
     public void setup() {
         percentages = new int[10];
-        for (int i = 0; i < percentages.length; i++) {
-            percentages[i] = 0;
-        }
-        neuronalNetwork = new NeuronalNetwork(784, 784, 10);
-//
-//        trainingSet.readData();
-//        testSet.readData();
-//        trainingData = trainingSet.getTrainingData();
-//        testData = testSet.getTestData();
-//        testNumbers = testSet.getNumbers();
-//        neuronalNetwork = new NeuronalNetwork(784, 256, 10);
-//
-//
+        Arrays.fill(percentages, 0);
+
+        trainingSet.readData();
+        testSet.readData();
+        trainingData = trainingSet.getTrainingData();
+        testData = testSet.getTestData();
+        testNumbers = testSet.getNumbers();
+        neuronalNetwork = new NeuronalNetwork(784, 256, 10);
+
+
 
 
         frameRate(50);
@@ -89,15 +86,7 @@ public class Main extends PApplet {
 
     @Override
     public void mouseDragged() {
-        /*PImage img = createImage(32, 32, RGB);
-        img.loadPixels();
-        for (int i = 0; i<img.pixels.length; i++) {
-            System.out.println(img.pixels[i]);
-        }
-
-        fill(0);
-         */
-        if (mouseX < 280 && mouseY < 280) {
+        if (mouseX < 272 && mouseY < 272) {
             noStroke();
             ellipse(mouseX, mouseY, 16, 16);
             fill(255);
@@ -115,63 +104,60 @@ public class Main extends PApplet {
             noStroke();
             fill(0);
             rect(0,0,279,279);
-            for (int i = 0; i < percentages.length; i++) {
-                percentages[i] = 0;
-            }
+            Arrays.fill(percentages, 0);
         }
         if (key == 't') {
             System.err.println("Train started");
             train();
             System.err.println("Train finished");
+
         }
         if (key == 'f') {
+
             noStroke();
             fill(0);
-            rect(400,0,500,250);
-            float[] floats280 = new float[280*280];
-            for (int y = 0; y < 280; y++) {
-                for (int x = 0; x < 280; x++) {
-                    Color color = new Color(get(x, y));
-                    floats280[x + y] = .299f * color.getRed() + 0.587f * color.getGreen() + 0.114f * color.getBlue();
-                }
-            }
-            float[] floats = new float[28*28];
-            for (int i = 0; i < floats.length; i++) {
-                float val = 0;
-                for (int x = 0; x < 10; x ++) {
-                    val =+ floats280[x + (10 * i)];
-                }
-                if (val == 0) {
-                    floats[i] = 0;
-                } else {
-                    floats[i] = (val) / 255;
-                }
-            }
+            rect(400,0,520,250);
 
 
-            float res = 10;
-            float cols = width / res;
-            float rows = height / res;
-            for (int col = 300; col < 328; col++) {
-                for (int row = 0; row < 28; row++) {
-                    noStroke();
-                    fill(floats[col + row] * 255);
-                    rect(col * res, row * res, res, res);
+            PImage image = get(0,0,280,280);
+            image.resize(28,28);
+            image.save("src/main/resources/drawnNumber.jpg");
+            image.loadPixels();
+            int[] pixelArr = image.pixels;
+            System.out.println(Arrays.toString(pixelArr));
+            float[] pixelVals = new float[784];
+            int counter = 0;
+            System.out.println(pixelArr.length);
+            for (int y = 0; y < 28; y++) {
+                for (int x = 0; x < 28; x++) {
+                    int loc = x + y * 28;
+
+                    // The functions red(), green(), and blue() pull out the 3 color components from a pixel.
+                    float r = red(image.pixels[loc]) * 0.3f;
+                    float g = green(image.pixels[loc]) * 0.59f;
+                    float b = blue(image.pixels[loc]) * 0.11f;
+                    float gray = r + g + b;
+
+                    pixelVals[counter] = gray / 255;
+                    counter++;
                 }
             }
 
+            PImage resized = loadImage("src/main/resources/drawnNumber.jpg");
+            image(resized, 0,300);
 
-            System.out.println(Arrays.toString(floats));
-            float[] retVal = neuronalNetwork.feedForward(floats);
+            System.out.println(Arrays.toString(pixelVals));
+            float[] retVal = neuronalNetwork.feedForward(pixelVals);
             for (int i = 0; i < retVal.length; i++) {
                 percentages[i] = (int) (retVal[i] * 100);
             }
             System.out.println(Arrays.toString(retVal));
         }
+
         redraw();
     }
     private void train() {
-        for (int i = 0; i < 10000 ; i++) {
+        for (int i = 0; i < 50_000 ; i++) {
             if (i % 1000 == 0) System.out.println(i);
             int pick = ThreadLocalRandom.current().nextInt(0, trainingData.size());
             neuronalNetwork.backPropagation(trainingData.get(pick).getInputs(), trainingData.get(pick).getTargets());
