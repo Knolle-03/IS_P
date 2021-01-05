@@ -48,6 +48,7 @@ public class NeuronalNetwork {
 
     public void backPropagation(float[] inputsArr, float[] targetsArr) {
 
+        // feed forward part
         Matrix inputs = new Matrix(inputsArr);
         Matrix hidden = inputHiddenWeights.matrixProduct(inputs);
         hidden.matrixAddProduct(this.biasHidden);
@@ -57,36 +58,44 @@ public class NeuronalNetwork {
         outputs.matrixAddProduct(this.biasOutput);
         outputs.sigmoid();
 
+        // converts targets array to matrix
         Matrix targets = new Matrix(targetsArr);
 
         // calc hidden to output errors
         Matrix outputErrors = Matrix.subtract(targets, outputs);
 
+        // calc gradients (outputs) * (1 - outputs)
         Matrix gradients = Matrix.derivativeSigmoid(outputs);
         gradients = gradients.matrixMultiplyElementProduct(outputErrors);
         gradients.scalarMultiplyProduct(learningRate);
 
-
+        // calc deltas of the weights from hidden to output.
         Matrix hiddenTranspose = Matrix.transpose(hidden);
         Matrix weightsHiddenToOutputDeltas = gradients.matrixProduct(hiddenTranspose);
 
+        // adjust hidden to output weights
         hiddenOutputWeights.matrixAddProduct(weightsHiddenToOutputDeltas);
 
+        // adjust output bias
         biasOutput.matrixAddProduct(gradients);
 
-
-        //
+        // calc hidden layer error
         Matrix hiddenOutputWeightsTransposed = Matrix.transpose(hiddenOutputWeights);
         Matrix hiddenErrors = hiddenOutputWeightsTransposed.matrixProduct(outputErrors);
 
+        // calc hidden gradient
         Matrix hiddenGradient = Matrix.derivativeSigmoid(hidden);
         hiddenGradient = hiddenGradient.matrixMultiplyElementProduct(hiddenErrors);
         hiddenGradient.scalarMultiplyProduct(learningRate);
 
+        // calc input to hidden deltas
         Matrix inputsTranspose = Matrix.transpose(inputs);
         Matrix weightsInputsToHiddenDeltas = hiddenGradient.matrixProduct(inputsTranspose);
 
+        // adjust input to hidden layer
         inputHiddenWeights.matrixAddProduct(weightsInputsToHiddenDeltas);
+
+        // adjust hidden bias
         biasHidden.matrixAddProduct(hiddenGradient);
 
     }

@@ -23,7 +23,7 @@ public class PerceptronSketch extends PApplet {
 
 
     public void setup() {
-        perceptron = new Perceptron(this, 3, 0.0005f);
+        perceptron = new Perceptron(this, 3, 0.005f);
 
         for (int i = 0; i < points.length; i++) {
             points[i] = new Point(this);

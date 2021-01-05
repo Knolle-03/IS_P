@@ -1,4 +1,4 @@
-package p3.network.Util;
+package p3.network.XOR;
 
 import p3.network.mnist.util.TrainingData;
 
